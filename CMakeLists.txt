@@ -26,7 +26,8 @@ include_directories(src/usecases)
 include_directories(src/winagg)
 include_directories(src/yahoo)
 include_directories(src/yahoo_m)
-include_directories(src/RegesMatching)
+include_directories(src/RegexMatching)
+include_directories(src/ConceptDrift)
 
 add_executable(AIR
         src/batching/Map.cpp
@@ -99,8 +100,6 @@ add_executable(AIR
         src/usecases/YSB.hpp
         src/usecases/YSB_m.cpp
         src/usecases/YSB_m.hpp
-        src/usecases/RegexMatching.cpp
-        src/usecases/RegexMatching.hpp
         src/usecases/ConceptDrift.cpp
         src/usecases/ConceptDrift.hpp
         src/winagg/EventSharder.cpp
@@ -125,14 +124,6 @@ add_executable(AIR
         src/yahoo_m/FullAggregator_m.hpp
         src/yahoo_m/WinJoinYSB_m.cpp
         src/yahoo_m/WinJoinYSB_m.hpp
-        src/RegexMatching/EventCollector_rp.cpp
-        src/RegexMatching/EventCollector_rp.hpp
-        src/RegexMatching/EventGenerator_rp.cpp
-        src/RegexMatching/EventGenerator_rp.hpp
-        src/RegexMatching/EventFilter_rp.cpp
-        src/RegexMatching/EventFilter_rp.hpp
-        src/RegexMatching/FullAggregator_rp.cpp
-        src/RegexMatching/FullAggregator_rp.hpp)
         src/ConceptDrift/EventCollector_cd.cpp
         src/ConceptDrift/EventCollector_cd.hpp
         src/ConceptDrift/EventFilter_cd.cpp
@@ -140,5 +131,5 @@ add_executable(AIR
         src/ConceptDrift/EventGenerator_cd.cpp
         src/ConceptDrift/EventGenerator_cd.hpp
         src/ConceptDrift/FullAggregator_cd.cpp
-        src/ConceptDrift/FullAggregator_cd.hpp
+        src/ConceptDrift/FullAggregator_cd.hpp)
         

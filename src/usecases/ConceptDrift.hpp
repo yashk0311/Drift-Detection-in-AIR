@@ -12,7 +12,7 @@ public:
 	Vertex *generator, *filter, *aggregate,*join,
 			*collector;
 
-	ConceptDrift(unsigned long tp, string pattern);
+	ConceptDrift(unsigned long tp, string drift_type, unsigned long drift_rate);
 
 	~ConceptDrift();
 

@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yash/Desktop/Clg/7th_Sem/SDS/Assignment_3/AIR_regex
+CMAKE_SOURCE_DIR = /home/yash/Desktop/Clg/7th_Sem/SDS/Project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yash/Desktop/Clg/7th_Sem/SDS/Assignment_3/AIR_regex/Release
+CMAKE_BINARY_DIR = /home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yash/Desktop/Clg/7th_Sem/SDS/Assignment_3/AIR_regex/Release/CMakeFiles /home/yash/Desktop/Clg/7th_Sem/SDS/Assignment_3/AIR_regex/Release//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles /home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yash/Desktop/Clg/7th_Sem/SDS/Assignment_3/AIR_regex/Release/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -130,64 +130,64 @@ AIR/fast:
 .PHONY : AIR/fast
 
 # target to build an object file
-src/RegexMatching/EventCollector_rp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventCollector_rp.o
-.PHONY : src/RegexMatching/EventCollector_rp.o
+src/ConceptDrift/EventCollector_cd.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.o
+.PHONY : src/ConceptDrift/EventCollector_cd.o
 
 # target to preprocess a source file
-src/RegexMatching/EventCollector_rp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventCollector_rp.i
-.PHONY : src/RegexMatching/EventCollector_rp.i
+src/ConceptDrift/EventCollector_cd.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.i
+.PHONY : src/ConceptDrift/EventCollector_cd.i
 
 # target to generate assembly for a file
-src/RegexMatching/EventCollector_rp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventCollector_rp.s
-.PHONY : src/RegexMatching/EventCollector_rp.s
+src/ConceptDrift/EventCollector_cd.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.s
+.PHONY : src/ConceptDrift/EventCollector_cd.s
 
 # target to build an object file
-src/RegexMatching/EventFilter_rp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventFilter_rp.o
-.PHONY : src/RegexMatching/EventFilter_rp.o
+src/ConceptDrift/EventFilter_cd.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o
+.PHONY : src/ConceptDrift/EventFilter_cd.o
 
 # target to preprocess a source file
-src/RegexMatching/EventFilter_rp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventFilter_rp.i
-.PHONY : src/RegexMatching/EventFilter_rp.i
+src/ConceptDrift/EventFilter_cd.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.i
+.PHONY : src/ConceptDrift/EventFilter_cd.i
 
 # target to generate assembly for a file
-src/RegexMatching/EventFilter_rp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventFilter_rp.s
-.PHONY : src/RegexMatching/EventFilter_rp.s
+src/ConceptDrift/EventFilter_cd.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.s
+.PHONY : src/ConceptDrift/EventFilter_cd.s
 
 # target to build an object file
-src/RegexMatching/EventGenerator_rp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventGenerator_rp.o
-.PHONY : src/RegexMatching/EventGenerator_rp.o
+src/ConceptDrift/EventGenerator_cd.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.o
+.PHONY : src/ConceptDrift/EventGenerator_cd.o
 
 # target to preprocess a source file
-src/RegexMatching/EventGenerator_rp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventGenerator_rp.i
-.PHONY : src/RegexMatching/EventGenerator_rp.i
+src/ConceptDrift/EventGenerator_cd.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.i
+.PHONY : src/ConceptDrift/EventGenerator_cd.i
 
 # target to generate assembly for a file
-src/RegexMatching/EventGenerator_rp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/EventGenerator_rp.s
-.PHONY : src/RegexMatching/EventGenerator_rp.s
+src/ConceptDrift/EventGenerator_cd.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.s
+.PHONY : src/ConceptDrift/EventGenerator_cd.s
 
 # target to build an object file
-src/RegexMatching/FullAggregator_rp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/FullAggregator_rp.o
-.PHONY : src/RegexMatching/FullAggregator_rp.o
+src/ConceptDrift/FullAggregator_cd.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o
+.PHONY : src/ConceptDrift/FullAggregator_cd.o
 
 # target to preprocess a source file
-src/RegexMatching/FullAggregator_rp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/FullAggregator_rp.i
-.PHONY : src/RegexMatching/FullAggregator_rp.i
+src/ConceptDrift/FullAggregator_cd.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.i
+.PHONY : src/ConceptDrift/FullAggregator_cd.i
 
 # target to generate assembly for a file
-src/RegexMatching/FullAggregator_rp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/RegexMatching/FullAggregator_rp.s
-.PHONY : src/RegexMatching/FullAggregator_rp.s
+src/ConceptDrift/FullAggregator_cd.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.s
+.PHONY : src/ConceptDrift/FullAggregator_cd.s
 
 # target to build an object file
 src/batching/Map.o:
@@ -610,6 +610,21 @@ src/serialization/Serialization.s:
 .PHONY : src/serialization/Serialization.s
 
 # target to build an object file
+src/usecases/ConceptDrift.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/ConceptDrift.o
+.PHONY : src/usecases/ConceptDrift.o
+
+# target to preprocess a source file
+src/usecases/ConceptDrift.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/ConceptDrift.i
+.PHONY : src/usecases/ConceptDrift.i
+
+# target to generate assembly for a file
+src/usecases/ConceptDrift.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/ConceptDrift.s
+.PHONY : src/usecases/ConceptDrift.s
+
+# target to build an object file
 src/usecases/MapReduce.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/MapReduce.o
 .PHONY : src/usecases/MapReduce.o
@@ -623,21 +638,6 @@ src/usecases/MapReduce.i:
 src/usecases/MapReduce.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/MapReduce.s
 .PHONY : src/usecases/MapReduce.s
-
-# target to build an object file
-src/usecases/RegexMatching.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/RegexMatching.o
-.PHONY : src/usecases/RegexMatching.o
-
-# target to preprocess a source file
-src/usecases/RegexMatching.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/RegexMatching.i
-.PHONY : src/usecases/RegexMatching.i
-
-# target to generate assembly for a file
-src/usecases/RegexMatching.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/usecases/RegexMatching.s
-.PHONY : src/usecases/RegexMatching.s
 
 # target to build an object file
 src/usecases/StreamingTest.o:
@@ -888,18 +888,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... AIR"
-	@echo "... src/RegexMatching/EventCollector_rp.o"
-	@echo "... src/RegexMatching/EventCollector_rp.i"
-	@echo "... src/RegexMatching/EventCollector_rp.s"
-	@echo "... src/RegexMatching/EventFilter_rp.o"
-	@echo "... src/RegexMatching/EventFilter_rp.i"
-	@echo "... src/RegexMatching/EventFilter_rp.s"
-	@echo "... src/RegexMatching/EventGenerator_rp.o"
-	@echo "... src/RegexMatching/EventGenerator_rp.i"
-	@echo "... src/RegexMatching/EventGenerator_rp.s"
-	@echo "... src/RegexMatching/FullAggregator_rp.o"
-	@echo "... src/RegexMatching/FullAggregator_rp.i"
-	@echo "... src/RegexMatching/FullAggregator_rp.s"
+	@echo "... src/ConceptDrift/EventCollector_cd.o"
+	@echo "... src/ConceptDrift/EventCollector_cd.i"
+	@echo "... src/ConceptDrift/EventCollector_cd.s"
+	@echo "... src/ConceptDrift/EventFilter_cd.o"
+	@echo "... src/ConceptDrift/EventFilter_cd.i"
+	@echo "... src/ConceptDrift/EventFilter_cd.s"
+	@echo "... src/ConceptDrift/EventGenerator_cd.o"
+	@echo "... src/ConceptDrift/EventGenerator_cd.i"
+	@echo "... src/ConceptDrift/EventGenerator_cd.s"
+	@echo "... src/ConceptDrift/FullAggregator_cd.o"
+	@echo "... src/ConceptDrift/FullAggregator_cd.i"
+	@echo "... src/ConceptDrift/FullAggregator_cd.s"
 	@echo "... src/batching/Map.o"
 	@echo "... src/batching/Map.i"
 	@echo "... src/batching/Map.s"
@@ -984,12 +984,12 @@ help:
 	@echo "... src/serialization/Serialization.o"
 	@echo "... src/serialization/Serialization.i"
 	@echo "... src/serialization/Serialization.s"
+	@echo "... src/usecases/ConceptDrift.o"
+	@echo "... src/usecases/ConceptDrift.i"
+	@echo "... src/usecases/ConceptDrift.s"
 	@echo "... src/usecases/MapReduce.o"
 	@echo "... src/usecases/MapReduce.i"
 	@echo "... src/usecases/MapReduce.s"
-	@echo "... src/usecases/RegexMatching.o"
-	@echo "... src/usecases/RegexMatching.i"
-	@echo "... src/usecases/RegexMatching.s"
 	@echo "... src/usecases/StreamingTest.o"
 	@echo "... src/usecases/StreamingTest.i"
 	@echo "... src/usecases/StreamingTest.s"

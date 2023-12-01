@@ -1,9 +1,9 @@
 #include "ConceptDrift.hpp"
 
-#include "../ConceptDrift/EventCollector_rp.hpp"
-#include "../ConceptDrift/EventFilter_rp.hpp"
-#include "../ConceptDrift/EventGenerator_rp.hpp"
-#include "../ConceptDrift/FullAggregator_rp.hpp"
+#include "../ConceptDrift/EventCollector_cd.hpp"
+#include "../ConceptDrift/EventFilter_cd.hpp"
+#include "../ConceptDrift/EventGenerator_cd.hpp"
+#include "../ConceptDrift/FullAggregator_cd.hpp"
 
 
 using namespace std;
@@ -12,13 +12,13 @@ using namespace std;
     * pair and the event timestamp of the latest record generated that belongs to that bucket.
  **/
 
-ConceptDrift::ConceptDrift(unsigned long throughput, string pattern) :
+ConceptDrift::ConceptDrift(unsigned long throughput, string drift_type, unsigned long drift_rate) :
 		Dataflow() {
 
-	generator = new EventGeneratorRP(1, rank, worldSize, throughput);
-	filter = new EventFilterRP(2, rank, worldSize, pattern);  //concept drift detector
-	aggregate = new FullAggregatorRP(3, rank, worldSize);
-	collector = new EventCollectorRP(4, rank, worldSize);
+	generator = new EventGeneratorCD(1, rank, worldSize, throughput, drift_rate);
+	filter = new EventFilterCD(2, rank, worldSize, drift_type);  //concept drift detector
+	aggregate = new FullAggregatorCD(3, rank, worldSize);
+	collector = new EventCollectorCD(4, rank, worldSize);
 
 	addLink(generator, filter);
 	addLink(filter, aggregate);

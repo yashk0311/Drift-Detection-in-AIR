@@ -53,7 +53,7 @@
 #include "../usecases/WinAgg.hpp"
 #include "../usecases/YSB.hpp"
 #include "../usecases/YSB_m.hpp"
-#include "../usecases/RegexMatching.hpp"
+#include "../usecases/ConceptDrift.hpp"
 
 using namespace std;
 
@@ -62,7 +62,8 @@ int main(int argc, char* argv[]) {
 	Dataflow* dataflow = nullptr;
 	bool batchflag = false;
 	unsigned long tp = 10000;
-	string pattern = "ABC";
+	string drift_type = "DDM";
+	unsigned long drift_rate = 100;
 
 	if (argc > 1) {
 
@@ -71,7 +72,12 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (argc > 3) {
-			pattern = argv[3];
+			drift_type = argv[3];
+		}
+
+		if (argc > 4)
+		{
+			drift_rate = atol(argv[4]);
 		}
 
 		string s(argv[1]);
@@ -86,22 +92,15 @@ int main(int argc, char* argv[]) {
 			dataflow = new MapReduce();
 			batchflag = true;
 
-		} else if (s.compare("YSB") == 0) {
-
-			dataflow = new YSB(tp, pattern);
-
-		} else if (s.compare("YSBM") == 0) {
+		} 
+		else if (s.compare("YSBM") == 0) {
 
 			dataflow = new YSB_m(tp);
 
 		} else if (s.compare("WA") == 0) {
 
 			dataflow = new WinAgg(tp);
-		} else if (s.compare("RP") == 0){
-
-			dataflow = new RegexMatching(tp, pattern);
-		}
-		else if (s.compare("CD") == 0){
+		}else if (s.compare("CD") == 0){
 
 			dataflow = new ConceptDrift(tp, drift_type, drift_rate);
 		}
