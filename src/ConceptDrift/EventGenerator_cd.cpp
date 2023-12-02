@@ -313,7 +313,7 @@ string EventGeneratorCD::generate_bag(unsigned long tp, unsigned long dr)
 			}
 		}
 	}
-	cout<<"inside generate_bag function ans is: "<<ans<<endl;
+	// cout<<"inside generate_bag function ans is: "<<ans<<endl;
 	return ans;
 }
 
@@ -345,6 +345,7 @@ void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 
 		sede.YSBserializeCD(event, message);
 		cout << "event_time: " << event->event_time << "\tbag contents: " << event->bag << endl;
+		cout<<endl;
 		if (max_time < event->event_time)
 			max_time = event->event_time;
 

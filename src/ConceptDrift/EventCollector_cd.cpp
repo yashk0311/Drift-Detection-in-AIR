@@ -129,7 +129,7 @@ void EventCollectorCD::streamProcess(int channel)
 				{
 					// cout<<"hi"<<endl;
 					sede.YSBdeserializeCD(inMessage, &eventPCReg,
-											 i * sizeof(EventCD));
+											 20 + (i * sizeof(EventCD)));
 					// sum_latency += eventPCReg.latency;
 					// cout<<eventPCReg.bag<<endl;
 					test_bag += eventPCReg.bag;
