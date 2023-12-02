@@ -16,25 +16,25 @@ ConceptDrift::ConceptDrift(unsigned long throughput, string drift_type, unsigned
 		Dataflow() {
 
 	generator = new EventGeneratorCD(1, rank, worldSize, throughput, drift_rate);
-	filter = new EventFilterCD(2, rank, worldSize, drift_type);  //concept drift detector
-	aggregate = new FullAggregatorCD(3, rank, worldSize);
-	collector = new EventCollectorCD(4, rank, worldSize);
+	// filter = new EventFilterCD(2, rank, worldSize, drift_type);  //concept drift detector
+	// aggregate = new FullAggregatorCD(3, rank, worldSize);
+	collector = new EventCollectorCD(2, rank, worldSize);
 
-	addLink(generator, filter);
-	addLink(filter, aggregate);
-	addLink(aggregate, collector);
+	// addLink(generator, filter);
+	// addLink(filter, aggregate);
+	addLink(generator, collector);
 
 	generator->initialize();
-	filter->initialize();
-	aggregate->initialize();
+	// filter->initialize();
+	// aggregate->initialize();
 	collector->initialize();
 }
 
 ConceptDrift::~ConceptDrift() {
 
 	delete generator;
-	delete filter;
-	delete aggregate;
+	// delete filter;
+	// delete aggregate;
 	delete collector;
 }
 

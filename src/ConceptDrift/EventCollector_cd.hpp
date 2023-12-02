@@ -51,6 +51,7 @@ public:
 	// Global stats
 	long int sum_latency;
 	long int sum_counts;
+	string test_bag;
 	int num_messages;
 
 	

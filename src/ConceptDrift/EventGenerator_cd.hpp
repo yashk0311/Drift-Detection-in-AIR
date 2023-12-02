@@ -55,19 +55,19 @@ public:
 
 private:
 	unsigned long throughput;
+	unsigned long drift_rate;
 
 	std::ofstream datafile;
 
 	vector<string> ad_ids;
 
-	void getNextMessage(EventRG *event, WrapperUnit *wrapper_unit,
-						Message *message, int events_per_msg, long int time_now);
+	void getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
+						Message *message, int events_per_msg, long int time_now, unsigned long tp, unsigned long dr);
 
+	vector<string> random_sample(vector<string> &items, int num);
 	int myrandom(int min, int max);
 
-	string generate_seq();
-	long int timeSinceEpochMillisec();
-	long int getCurrentTimestampMillisec();
+	string generate_bag(unsigned long tp, unsigned long dr);
 	string eventtypes[3] = {"click", "view", "purchase"};
 };
 

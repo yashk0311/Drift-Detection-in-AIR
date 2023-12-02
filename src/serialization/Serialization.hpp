@@ -46,6 +46,12 @@ typedef struct EventRG
 	char ad_id[51];
 } EventRG;
 
+typedef struct EventCD
+{
+	long int event_time;
+	char bag[30];
+} EventCD;
+
 typedef struct EventDG
 {
 	long int event_time;
@@ -60,6 +66,12 @@ typedef struct EventFT
 	long int event_time;
 	char ad_id[51];
 } EventFT;
+
+typedef struct EventFT_CD
+{
+	long int event_time;
+	char bag[30];
+} EventFT_CD;
 
 typedef struct EventJ
 {
@@ -88,6 +100,7 @@ typedef struct EventReg
 	int count;
 	long int latency;
 } EventReg;
+
 typedef struct IdCount
 {
 	long int max_event_time;
@@ -137,6 +150,11 @@ public:
 	void YSBdeserializeDG(Message *message, EventDG *event, int offset);
 
 	void YSBserializeRG(EventRG *event, Message *message);
+	
+	void YSBserializeCD(EventCD *event, Message *message);
+
+	void YSBdeserializeCD(Message *message, EventCD *event, int offset);
+
 
 	void YSBdeserializeRG(Message *message, EventRG *event, int offset);
 

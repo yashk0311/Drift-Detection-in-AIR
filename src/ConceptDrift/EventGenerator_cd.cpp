@@ -44,7 +44,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
-
+#include <bits/stdc++.h>
 #include "../communication/Window.hpp"
 #include "EventGenerator_cd.hpp"
 
@@ -54,6 +54,7 @@ EventGeneratorCD::EventGeneratorCD(int tag, int rank, int worldSize,
 								   unsigned long tp, unsigned long dr) : Vertex(tag, rank, worldSize)
 {
 	this->throughput = tp;
+	this->drift_rate = dr;
 	cout << "AIR INSTANCE AT RANK " << (rank + 1) << "/" << worldSize << " | TP: " << throughput << " | MSG/SEC/RANK: " << PER_SEC_MSG_COUNT << " | AGGR_WINDOW: " << AGG_WIND_SPAN << "ms" << endl;
 
 	S_CHECK(
@@ -85,13 +86,13 @@ void EventGeneratorCD::streamProcess(int channel)
 	Message **outMessagesPerSec = new Message *[PER_SEC_MSG_COUNT];
 
 	WrapperUnit wrapper_unit;
-	EventRG eventRG;
+	EventCD eventCD;
 
 	int wrappers_per_msg = 1; // currently only one wrapper per message!
 	int events_per_msg = this->throughput / PER_SEC_MSG_COUNT / worldSize;
 
-	cout<<"Events per message: "<< events_per_msg << endl;
-	
+	cout << "Events per message: " << events_per_msg << endl;
+
 	long int start_time = (long int)MPI_Wtime();
 	long int t1, t2;
 
@@ -107,7 +108,7 @@ void EventGeneratorCD::streamProcess(int channel)
 		{
 
 			outMessagesPerSec[msg_count] = new Message(
-				events_per_msg * sizeof(EventDG), wrappers_per_msg);
+				events_per_msg * sizeof(EventCD), wrappers_per_msg);
 
 			// Message header
 			long int time_now = (start_time + iteration_count) * 1000;
@@ -119,11 +120,15 @@ void EventGeneratorCD::streamProcess(int channel)
 				   sizeof(int));
 			memcpy(outMessagesPerSec[msg_count]->buffer + sizeof(int),
 				   &wrapper_unit, sizeof(WrapperUnit));
+			// Declare the eventCD variable
+			EventCD eventCD;
+
 			outMessagesPerSec[msg_count]->size += sizeof(int) + outMessagesPerSec[msg_count]->wrapper_length * sizeof(WrapperUnit);
 
 			// Message body
-			getNextMessage(&eventRG, &wrapper_unit,
-						   outMessagesPerSec[msg_count], events_per_msg, time_now);
+
+			getNextMessage(&eventCD, &wrapper_unit,
+						   outMessagesPerSec[msg_count], events_per_msg, time_now, throughput, drift_rate);
 
 			// Debug output ---
 			Serialization sede;
@@ -204,64 +209,142 @@ void EventGeneratorCD::streamProcess(int channel)
 		iteration_count++;
 	}
 }
-
-string EventGeneratorCD::generate_seq()
+vector<string> EventGeneratorCD::random_sample(vector<string> &items, int num)
 {
-	const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const int alphabetSize = alphabet.size();
-	string sequence = "";
-	// sequence +=alphabet;
-	// sequence +="ABCEDEFGHIJKLMNOPRSTUVWX";
+	random_shuffle(items.begin(), items.end());
+	vector<string> result(items.begin(), items.begin() + num);
+	return result;
+}
 
-	std::srand(static_cast<unsigned int>(std::time(0)));
+string EventGeneratorCD::generate_bag(unsigned long tp, unsigned long dr)
+{
 
-	for (int i = 0; i < 50; ++i)
+	vector<string> items = {"item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"};
+	int throughput = tp;
+	int drift_rate = dr;
+	int start = MPI_Wtime();
+	vector<string> trending_items = random_sample(items, 5);
+	vector<string> remaining_items;
+	vector<string> replaced_items;
+	for (auto &item : items)
 	{
-		sequence += alphabet[rand() % alphabetSize];
+		if (find(trending_items.begin(), trending_items.end(), item) == trending_items.end())
+		{
+			remaining_items.push_back(item);
+		}
 	}
+	int bag_count = 0;
+	int change_count = 0;
+	int change_rate = drift_rate / 2;
+	auto pause_start = chrono::system_clock::now();
+	string ans = "";
+	bool pause = false;
 
-	return sequence;
+	while (true)
+	{
+		// Generate a bag of trending items
+		if(MPI_Wtime()-start > 1 || bag_count > throughput)
+			break;
+
+		vector<string> bag = random_sample(trending_items, 5);
+		sort(bag.begin(), bag.end());
+		// cout << "Bag " << bag_count + 1 << ": ";
+		for (auto &item : bag)
+		{
+			ans += item;
+			ans += " ";
+		}
+
+		bag_count += 1;
+		this_thread::sleep_for(chrono::seconds(1) / throughput); // Wait for the next bag
+
+		if (pause && chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() <= 3)
+		{
+			// cout << "Pause is " << pause << ", time difference is " << chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() << endl;
+			continue;
+		}
+		else if (pause && chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() > 3)
+		{
+			remaining_items.clear();
+			for (auto &item : items)
+			{
+				if (find(trending_items.begin(), trending_items.end(), item) == trending_items.end())
+				{
+					remaining_items.push_back(item);
+				}
+			}
+			pause = false;
+			// cout<<"pause is "<<pause<<", time difference is "<<chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count()<<endl;
+		}
+		else if (bag_count >= drift_rate)
+		{
+			// After drift_rate bags, gradually change the trending items
+			if (bag_count % change_rate == 0 && !remaining_items.empty())
+			{
+				vector<string> items_to_replace;
+				for (const auto &item : trending_items)
+				{
+					if (find(replaced_items.begin(), replaced_items.end(), item) == replaced_items.end())
+					{
+						items_to_replace.push_back(item);
+					}
+				}
+
+				if (!items_to_replace.empty())
+				{
+					string item_to_replace = items_to_replace[rand() % items_to_replace.size()];
+					trending_items.erase(remove(trending_items.begin(), trending_items.end(), item_to_replace), trending_items.end());
+
+					string new_item = remaining_items[rand() % remaining_items.size()];
+					trending_items.push_back(new_item);
+					replaced_items.push_back(new_item);
+					remaining_items.erase(remove(remaining_items.begin(), remaining_items.end(), new_item), remaining_items.end());
+
+					change_count += 1;
+				}
+			}
+			// cout << "Change count: " << change_count << endl;
+			if (change_count == 5)
+			{
+				// After all trending items have been changed, start the pause
+				pause_start = chrono::system_clock::now();
+				pause = true;
+				change_count = 0;
+			}
+		}
+	}
+	cout<<"inside generate_bag function ans is: "<<ans<<endl;
+	return ans;
 }
 
-long int EventGeneratorCD::timeSinceEpochMillisec()
-{
-	using namespace std::chrono;
-	return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-}
-
-long int EventGeneratorCD::getCurrentTimestampMillisec()
-{
-	using namespace std::chrono;
-
-	auto currentTimePoint = system_clock::now();
-	auto duration = duration_cast<milliseconds>(currentTimePoint.time_since_epoch());
-
-	return duration.count();
-}
-
-void EventGeneratorCD::getNextMessage(EventRG *event, WrapperUnit *wrapper_unit,
-									  Message *message, int events_per_msg, long int time_now)
+void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
+									  Message *message, int events_per_msg, long int time_now, unsigned long tp, unsigned long dr)
 {
 
 	Serialization sede;
 	long int max_time = 0;
 	// Serializing the events
 	int i = 0;
+	// cout << events_per_msg << endl;
+
 	while (i < events_per_msg)
 	{
-		string seq = generate_seq();
-		memcpy(event->ad_id, seq.c_str(), 50);
+		// cout << "hi" << endl;
+		string seq = generate_bag(tp, dr);
+
+		memcpy(event->bag, seq.c_str(), 30);
 		event->event_time = (time_now);
 
-		S_CHECK(
-			datafile << event->event_time << "\t"
-					 // divide this by the agg wid size
-					 << event->event_time / AGG_WIND_SPAN << "\t"
-					 // divide this by the agg wid size
-					 << rank << "\t" << i << "\t" << event->event_type << "\t"
-					 << event->ad_id << endl;);
+		// S_CHECK(
+		// 	datafile << event->event_time << "\t"
+		// 			 // divide this by the agg wid size
+		// 			 << event->event_time / AGG_WIND_SPAN << "\t"
+		// 			 // divide this by the agg wid size
+		// 			 << rank << "\t" << i << "\t" << event->event_type << "\t"
+		// 			 << event->ad_id << endl;);
 
-		sede.YSBserializeRG(event, message);
+		sede.YSBserializeCD(event, message);
+		cout << "event_time: " << event->event_time << "\tbag contents: " << event->bag << endl;
 		if (max_time < event->event_time)
 			max_time = event->event_time;
 

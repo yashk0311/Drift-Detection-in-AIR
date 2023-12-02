@@ -130,6 +130,30 @@ void Serialization::YSBserializeRG(EventRG* event, Message* message) {
 	message->size += sizeof(EventRG);
 }
 
+void Serialization::YSBserializeCD(EventCD* event, Message* message) {
+	// cout<<"hi"<<endl;
+	char* b = message->buffer + message->size;
+	memcpy(b, &event->event_time, 8);
+	b += 8;
+	memcpy(b, &event->bag, 30);
+	message->size += sizeof(EventCD);
+	// cout<<event->event_time<<endl;
+	// cout<<event->bag<<endl;
+
+}
+
+void Serialization::YSBdeserializeCD(Message* message, EventCD* event,
+		int offset) {
+	// cout<<"hi"<<endl;
+	
+	char* b = message->buffer + offset;
+	memcpy(&event->event_time, b, 8);
+	b += 8;
+	memcpy(&event->bag, b, 30);
+	cout<<"insisde deserailize: "<<event->bag<<endl;
+	// cout<<event->event_time<<endl;
+}
+
 void Serialization::YSBdeserializeRG(Message* message, EventRG* event,
 		int offset) {
 	char* b = message->buffer + offset;
