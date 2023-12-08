@@ -12,7 +12,7 @@ int main()
 {
     ofstream file("generator.txt");
 
-    vector<string> items = {"item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"};
+    vector<string> items = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
     int throughput = 1;
     int drift_rate = 4;
     vector<string> trending_items = random_sample(items, 5);
@@ -53,15 +53,13 @@ int main()
         }
         else if (pause && chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() > 3)
         {
-            remaining_items.clear();
-            for (auto &item : items)
-            {
-                if (find(trending_items.begin(), trending_items.end(), item) == trending_items.end())
-                {
-                    remaining_items.push_back(item);
-                }
-            }
             pause = false;
+            replaced_items.clear();  // Clear replaced_items to allow previously replaced items to be replaced again
+            remaining_items = items; // Reset remaining_items to all items
+            for (const auto &item : trending_items)
+            {
+                remaining_items.erase(remove(remaining_items.begin(), remaining_items.end(), item), remaining_items.end());
+            }
         }
         else if (bag_count >= drift_rate)
         {

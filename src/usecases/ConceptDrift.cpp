@@ -37,4 +37,3 @@ ConceptDrift::~ConceptDrift() {
 	// delete aggregate;
 	delete collector;
 }
-

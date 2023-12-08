@@ -134,12 +134,10 @@ void Serialization::YSBserializeCD(EventCD* event, Message* message) {
 	// cout<<"hi"<<endl;
 	char* b = message->buffer + message->size;
 	// cout<<" Message size: "<<message->size<<endl;
-
-	cout<<"event time size: "<<sizeof(event->event_time)<<endl;
 	memcpy(b, &event->event_time, 8);
 	// cout<<"intermediate b value: "<<b<<" "<<endl;
 	b += 8;
-	memcpy(b, &event->bag, 30);
+	memcpy(b, &event->bag, 10);
 	// cout<<"intermediate b value: "<<b<<" "<<endl;
 	message->size += sizeof(EventCD);
 	// cout<<event->event_time<<endl;
@@ -154,7 +152,7 @@ void Serialization::YSBdeserializeCD(Message* message, EventCD* event,
 	char* b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
-	memcpy(&event->bag, b, 30);
+	memcpy(&event->bag, b, 10);
 	// cout<<"insisde deserailize bag contents: "<<event->bag<<" event time: "<< event->event_time<<" Message buffer: "<<b<<endl;
 	// cout<<event->event_time<<endl;
 }
@@ -165,6 +163,11 @@ void Serialization::YSBdeserializeRG(Message* message, EventRG* event,
 	memcpy(&event->event_time, b, 8);
 	b += 8;
 	memcpy(&event->ad_id, b, 51);
+}
+
+void Serialization::YSBprintCD(EventCD* event) {
+	cout << "event_time: " << event->event_time << "\tbag contents: "
+			<< event->bag << endl;
 }
 
 void Serialization::YSBprintDG(EventDG* event) {

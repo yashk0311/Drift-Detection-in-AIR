@@ -40,9 +40,9 @@
 #include <istream>
 using namespace std;
 
-EventCollectorCD::EventCollectorCD(int tag, int rank, int worldSize) : Vertex(tag, rank, worldSize), 
-lat("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/lat.csv"), 
-tp("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/throughputs.csv")
+EventCollectorCD::EventCollectorCD(int tag, int rank, int worldSize) : Vertex(tag, rank, worldSize),
+																	   lat("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/lat.csv"),
+																	   tp("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/throughputs.csv")
 {
 
 	// Global stats
@@ -118,20 +118,24 @@ void EventCollectorCD::streamProcess(int channel)
 				inMessage = tmpMessages->front();
 				tmpMessages->pop_front();
 
-				D(cout << "EVENTCOLLECTOR->POP MESSAGE: TAG [" << tag << "] @ "
-					   << rank << " CHANNEL " << channel << " BUFFER "
-					   << inMessage->size << endl);
+				sede.unwrap(inMessage);
 
-				int event_count = inMessage->size / sizeof(EventCD);
-				// cout<<event_count<<endl;
-				int i = 0, count = 0;
+				int offset = sizeof(int) + (inMessage->wrapper_length * sizeof(WrapperUnit));
+
+				int event_count = (inMessage->size - offset) / sizeof(EventCD);
+				// cout << event_count << endl;
+
+				int i = 0, j = 0;
 				while (i < event_count)
 				{
-					// cout<<"hi"<<endl;
+					// cout<<i<<endl;
 					sede.YSBdeserializeCD(inMessage, &eventPCReg,
-											 20 + (i * sizeof(EventCD)));
+										  offset + (i * sizeof(EventCD)));
 					// sum_latency += eventPCReg.latency;
 					// cout<<eventPCReg.bag<<endl;
+					cout << "bag contents: " << eventPCReg.bag << endl;
+					lat << WID_no << ", " << eventPCReg.bag << endl;
+					WID_no++;
 					test_bag += eventPCReg.bag;
 					// count += eventPCReg.count;
 					S_CHECK(
@@ -147,19 +151,17 @@ void EventCollectorCD::streamProcess(int channel)
 				// sum_counts += event_count; // count of distinct c_id's processed
 				num_messages++;
 
-				lat << WID_no << ", " << eventPCReg.bag << endl;
 				// tp << WID_no << ", " << eventPCReg.count << endl;
 
 				// cout << "The WID is: " <<eventPCReg.WID << endl;
 				// cout << "Latency of this window: " << eventPCReg.latency << endl;
 				// cout << "The number of events in that window id is: " << count << endl;
 				// cout << "Total latency uptil this window is: " << sum_latency << endl;
-				cout<<"test bag contents: "<<test_bag<<endl;
-				cout<<"bag contents: "<<eventPCReg.bag<<endl;
+				// cout<<"test bag contents: "<<test_bag<<endl;
 				cout << "------------------------------------------------------" << endl;
 				delete inMessage; // delete message from incoming queue
 				c++;
-				WID_no++;
+				
 			}
 
 			tmpMessages->clear();

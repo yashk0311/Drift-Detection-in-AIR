@@ -56,15 +56,14 @@ public:
 private:
 	unsigned long throughput;
 	unsigned long drift_rate;
-
+	unsigned long total_bags;
 	std::ofstream datafile;
-
 	vector<string> ad_ids;
 
 	void getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
-						Message *message, int events_per_msg, long int time_now, unsigned long tp, unsigned long dr);
+						Message *message, int events_per_msg, long int time_now);
 
-	vector<string> random_sample(vector<string> &items, int num);
+	// vector<string> random_sample(vector<string> &items, int num);
 	int myrandom(int min, int max);
 
 	string generate_bag(unsigned long tp, unsigned long dr);

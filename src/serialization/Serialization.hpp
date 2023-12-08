@@ -49,7 +49,7 @@ typedef struct EventRG
 typedef struct EventCD
 {
 	long int event_time;
-	char bag[30];
+	char bag[10];
 } EventCD;
 
 typedef struct EventDG
@@ -70,7 +70,7 @@ typedef struct EventFT
 typedef struct EventFT_CD
 {
 	long int event_time;
-	char bag[30];
+	char bag[10];
 } EventFT_CD;
 
 typedef struct EventJ
@@ -154,7 +154,8 @@ public:
 	void YSBserializeCD(EventCD *event, Message *message);
 
 	void YSBdeserializeCD(Message *message, EventCD *event, int offset);
-
+	
+	void YSBprintCD(EventCD* event);
 
 	void YSBdeserializeRG(Message *message, EventRG *event, int offset);
 

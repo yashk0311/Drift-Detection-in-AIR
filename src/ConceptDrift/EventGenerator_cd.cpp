@@ -55,6 +55,7 @@ EventGeneratorCD::EventGeneratorCD(int tag, int rank, int worldSize,
 {
 	this->throughput = tp;
 	this->drift_rate = dr;
+	total_bags = 0;
 	cout << "AIR INSTANCE AT RANK " << (rank + 1) << "/" << worldSize << " | TP: " << throughput << " | MSG/SEC/RANK: " << PER_SEC_MSG_COUNT << " | AGGR_WINDOW: " << AGG_WIND_SPAN << "ms" << endl;
 
 	S_CHECK(
@@ -128,15 +129,18 @@ void EventGeneratorCD::streamProcess(int channel)
 			// Message body
 
 			getNextMessage(&eventCD, &wrapper_unit,
-						   outMessagesPerSec[msg_count], events_per_msg, time_now, throughput, drift_rate);
+						   outMessagesPerSec[msg_count], events_per_msg, time_now);
 
 			// Debug output ---
 			Serialization sede;
 
-			// for (int e = 0; e < events_per_msg; e++)
-			// {
-			// sede.YSBdeserializeDG(outMessagesPerSec[msg_count], &eventRG,
-			// 						  sizeof(int) + (outMessagesPerSec[msg_count]->wrapper_length * sizeof(WrapperUnit)) + (e * sizeof(EventDG)));
+			// for (int e = 0; e < events_per_msg; e++) {
+			// 	sede.YSBdeserializeCD(outMessagesPerSec[msg_count], &eventCD,
+			// 			sizeof(int)
+			// 					+ (outMessagesPerSec[msg_count]->wrapper_length
+			// 							* sizeof(WrapperUnit))
+			// 					+ (e * sizeof(EventCD)));
+			// 	sede.YSBprintCD(&eventCD);
 			// }
 
 			msg_count++;
@@ -169,6 +173,8 @@ void EventGeneratorCD::streamProcess(int channel)
 					(*v)->inMessages[idx].push_back(
 						outMessagesPerSec[msg_count]);
 
+					
+
 					D(
 						cout << "EventGeneratorCD->PIPELINE MESSAGE [" << tag
 							 << "] #" << c << " @ " << rank
@@ -186,6 +192,7 @@ void EventGeneratorCD::streamProcess(int channel)
 					// Normal mode: synchronize on outgoing message channel & send message
 					pthread_mutex_lock(&senderMutexes[idx]);
 					outMessages[idx].push_back(outMessagesPerSec[msg_count]);
+					// cout<<outMessagesPerSec[msg_count]->size<<endl;
 
 					D(
 						cout << "EventGeneratorCD->PUSHBACK MESSAGE [" << tag
@@ -209,19 +216,19 @@ void EventGeneratorCD::streamProcess(int channel)
 		iteration_count++;
 	}
 }
-vector<string> EventGeneratorCD::random_sample(vector<string> &items, int num)
+
+vector<string> random_sample(vector<string> &items, int num)
 {
-	random_shuffle(items.begin(), items.end());
+	// random_shuffle(items.begin(), items.end());
 	vector<string> result(items.begin(), items.begin() + num);
 	return result;
 }
 
-string EventGeneratorCD::generate_bag(unsigned long tp, unsigned long dr)
-{
 
-	vector<string> items = {"item1", "item2", "item3", "item4", "item5", "item6", "item7", "item8", "item9", "item10"};
-	int throughput = tp;
-	int drift_rate = dr;
+void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
+									  Message *message, int events_per_msg, long int time_now)
+{
+	vector<string> items = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
 	int start = MPI_Wtime();
 	vector<string> trending_items = random_sample(items, 5);
 	vector<string> remaining_items;
@@ -233,18 +240,25 @@ string EventGeneratorCD::generate_bag(unsigned long tp, unsigned long dr)
 			remaining_items.push_back(item);
 		}
 	}
-	int bag_count = 0;
+
+    int bag_count = 0;
 	int change_count = 0;
-	int change_rate = drift_rate / 2;
-	auto pause_start = chrono::system_clock::now();
+	auto pause_start =chrono::system_clock::now();
 	string ans = "";
 	bool pause = false;
+	int change_rate = drift_rate / 2;
 
-	while (true)
+	Serialization sede;
+	long int max_time = 0;
+	int i = 0;
+
+	while (i < events_per_msg)
 	{
-		// Generate a bag of trending items
-		if(MPI_Wtime()-start > 1 || bag_count > throughput)
+		if (MPI_Wtime() - start > 1 || bag_count > throughput)
+		{
+			total_bags += bag_count;
 			break;
+		}
 
 		vector<string> bag = random_sample(trending_items, 5);
 		sort(bag.begin(), bag.end());
@@ -254,6 +268,16 @@ string EventGeneratorCD::generate_bag(unsigned long tp, unsigned long dr)
 			ans += item;
 			ans += " ";
 		}
+
+		memcpy(event->bag, ans.c_str(), 10);
+		event->event_time = (time_now) + (999 - i % 1000);;
+		ans = ""; 
+
+		sede.YSBserializeCD(event, message);
+		// cout << "event_time: " << event->event_time << "\tbag contents: " << event->bag << endl;
+		// cout << endl;
+		if (max_time < event->event_time)
+			max_time = event->event_time;
 
 		bag_count += 1;
 		this_thread::sleep_for(chrono::seconds(1) / throughput); // Wait for the next bag
@@ -312,46 +336,10 @@ string EventGeneratorCD::generate_bag(unsigned long tp, unsigned long dr)
 				change_count = 0;
 			}
 		}
-	}
-	// cout<<"inside generate_bag function ans is: "<<ans<<endl;
-	return ans;
-}
-
-void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
-									  Message *message, int events_per_msg, long int time_now, unsigned long tp, unsigned long dr)
-{
-
-	Serialization sede;
-	long int max_time = 0;
-	// Serializing the events
-	int i = 0;
-	// cout << events_per_msg << endl;
-
-	while (i < events_per_msg)
-	{
-		// cout << "hi" << endl;
-		string seq = generate_bag(tp, dr);
-
-		memcpy(event->bag, seq.c_str(), 30);
-		event->event_time = (time_now);
-
-		// S_CHECK(
-		// 	datafile << event->event_time << "\t"
-		// 			 // divide this by the agg wid size
-		// 			 << event->event_time / AGG_WIND_SPAN << "\t"
-		// 			 // divide this by the agg wid size
-		// 			 << rank << "\t" << i << "\t" << event->event_type << "\t"
-		// 			 << event->ad_id << endl;);
-
-		sede.YSBserializeCD(event, message);
-		cout << "event_time: " << event->event_time << "\tbag contents: " << event->bag << endl;
-		cout<<endl;
-		if (max_time < event->event_time)
-			max_time = event->event_time;
-
 		i++;
 	}
 	wrapper_unit->window_start_time = max_time;
+	// cout<<message->size<<endl;
 }
 
 int EventGeneratorCD::myrandom(int min, int max)
