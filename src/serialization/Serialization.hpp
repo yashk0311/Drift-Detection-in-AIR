@@ -49,7 +49,7 @@ typedef struct EventRG
 typedef struct EventCD
 {
 	long int event_time;
-	char bag[10];
+	char bag[15];
 } EventCD;
 
 typedef struct EventDG
@@ -67,10 +67,16 @@ typedef struct EventFT
 	char ad_id[51];
 } EventFT;
 
+typedef struct EventAdwin
+{
+	long int event_time;
+	char drift[2];
+} EventAdwin;
+
 typedef struct EventFT_CD
 {
 	long int event_time;
-	char bag[10];
+	char bag[15];
 } EventFT_CD;
 
 typedef struct EventJ
@@ -150,12 +156,12 @@ public:
 	void YSBdeserializeDG(Message *message, EventDG *event, int offset);
 
 	void YSBserializeRG(EventRG *event, Message *message);
-	
+
 	void YSBserializeCD(EventCD *event, Message *message);
 
 	void YSBdeserializeCD(Message *message, EventCD *event, int offset);
-	
-	void YSBprintCD(EventCD* event);
+
+	void YSBprintCD(EventCD *event);
 
 	void YSBdeserializeRG(Message *message, EventRG *event, int offset);
 
@@ -188,14 +194,20 @@ public:
 	void YSBprintReg(EventReg *event);
 
 	void YSBserializePCReg(EventReg *event, Message *message);
-	
+
 	void YSBdeserializePCReg(Message *message, EventReg *event, int offset);
 	//-----for WIN_AGG use-case------
 
 	void YSBserializeIdCnt(IdCount *event, Message *message);
 
 	void YSBdeserializeIdCnt(Message *message, IdCount *event, int offset);
+	
+	void YSBserializeAdwin(EventAdwin* event, Message* message);
 
+	void YSBdeserializeAdwin(Message *message, EventAdwin *event, int offset); 
+	
+	void YSBprintAdwin(EventAdwin* event);
+	
 	void YSBprintIdCnt(IdCount *event);
 
 	//----for YSB* use-case-------

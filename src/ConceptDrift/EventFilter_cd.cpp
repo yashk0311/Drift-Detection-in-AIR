@@ -75,6 +75,77 @@ bool EventFilterCD::find_regex(string text, string pattern)
 	return regex_search(text, match, regexPattern);
 }
 
+struct Bucket
+{
+	int size;
+	double sum;
+};
+
+vector<Bucket> updateBuckets(vector<Bucket> buckets, double mean, int bucketSize)
+{
+	if (buckets.size() > bucketSize)
+	{
+		buckets.erase(buckets.begin());
+	}
+
+	buckets.push_back({1, mean});
+	return buckets;
+}
+
+pair<double, int> calculateMean(vector<Bucket> buckets)
+{
+	double sum = 0.0;
+	int count = 0;
+
+	for (const auto &bucket : buckets)
+	{
+		sum += bucket.sum;
+		count += bucket.size;
+	}
+
+	return make_pair(sum / count, count);
+}
+
+double calculateVariance(vector<Bucket> buckets, double mean)
+{
+	double variance = 0.0;
+	int count = 0;
+
+	for (const auto &bucket : buckets)
+	{
+		variance += bucket.size * pow(bucket.sum / bucket.size - mean, 2);
+		count += bucket.size;
+	}
+
+	return variance / count;
+}
+
+pair<bool, vector<Bucket>> detectDrift(double variance, int totalSize, int bucketSize, double lastChange, double delta)
+{
+	if (totalSize <= bucketSize)
+	{
+		return make_pair(false, vector<Bucket>());
+	}
+
+	double p = 1.0 / totalSize;
+	double q = 1.0 / (totalSize - bucketSize);
+	double z = sqrt(2 * log(1 / delta) * p * q);
+
+	double driftThreshold = z * sqrt(variance / bucketSize) + 2 * log(1 / delta) / bucketSize;
+
+	if (variance - lastChange > driftThreshold)
+	{
+		lastChange = variance;
+		vector<Bucket> buckets;
+		buckets.push_back({0, 0.0});
+		totalSize = 0;
+		lastChange = 0.0;
+		return make_pair(true, buckets);
+	}
+
+	return make_pair(false, vector<Bucket>());
+}
+
 void EventFilterCD::streamProcess(int channel)
 {
 
@@ -86,8 +157,8 @@ void EventFilterCD::streamProcess(int channel)
 	Serialization sede;
 
 	// WrapperUnit wrapper_unit;
-	EventRG eventRG;
-	EventFT eventFT;
+	EventCD eventCD;
+	EventAdwin eventAdwin;
 
 	// eventFT.max_event_time = LONG_MAX;
 
@@ -131,7 +202,7 @@ void EventFilterCD::streamProcess(int channel)
 			memcpy(outMessage->buffer, inMessage->buffer, offset); // simply copy header from old message for now!
 			outMessage->size += offset;
 
-			int event_count = (inMessage->size - offset) / sizeof(EventDG);
+			int event_count = (inMessage->size - offset) / sizeof(EventCD);
 
 			D(cout << "THROUGHPUT: " << event_count << " @RANK-" << rank << " TIME: " << (long int)MPI_Wtime() << endl;)
 
@@ -142,21 +213,71 @@ void EventFilterCD::streamProcess(int channel)
 						 << endl;)
 
 			int i = 0, j = 0;
+
+			string line;
+			int line_c = 0;
+			vector<Bucket> buckets;
+			buckets.push_back({0, 0.0});
+			int totalSize = 0;
+			double lastChange = 0.0;
+			int bucketSize = 10;
+			double delta = 0.03;
+			//*/
 			while (i < event_count)
 			{
 
-				sede.YSBdeserializeRG(inMessage, &eventRG,
-									  offset + (i * sizeof(EventRG)));
+				sede.YSBdeserializeCD(inMessage, &eventCD,
+									  offset + (i * sizeof(EventCD)));
 
-				string text = eventRG.ad_id;
-				
-				if (find_regex(text, pattern))
-				{ // FILTERING BASED ON EVENT_TYPE
-					eventFT.event_time = eventRG.event_time;
-					memcpy(eventFT.ad_id, eventRG.ad_id, 51);
-					sede.YSBserializeFT(&eventFT, outMessage); 
-					j++;
+				eventAdwin.event_time = eventCD.event_time;
+				// cout << "Generator event time: " << eventCD.event_time << endl;
+				// cout << "Filter event time: " << eventAdwin.event_time << endl;
+				line = eventCD.bag;
+				istringstream iss(line);
+				string number;
+				vector<double> values;
+				iss >> number;
+				while (iss >> number)
+				{
+					values.push_back(stod(number));
 				}
+
+				// if (values.size() != 5)
+				// {
+				// 	cout << "Invalid input: " << line << endl;
+				// 	continue;
+				// }
+
+				double mean = accumulate(values.begin(), values.end(), 0.0) / values.size();
+				buckets = updateBuckets(buckets, mean, bucketSize);
+
+				pair<double, int> meanAndCount = calculateMean(buckets);
+				double globalMean = meanAndCount.first;
+				double variance = calculateVariance(buckets, globalMean);
+
+				pair<bool, vector<Bucket>> driftAndBuckets = detectDrift(variance, totalSize, bucketSize, lastChange, delta);
+				if (driftAndBuckets.first)
+				{
+					string ans = "1";
+					memcpy(eventAdwin.drift, ans.c_str(), strlen(ans.c_str()) + 1); // Use strlen for correct memory copy
+					buckets = driftAndBuckets.second;
+				}
+				else
+				{
+					string ans = "0";
+					memcpy(eventAdwin.drift, ans.c_str(), strlen(ans.c_str()) + 1); // Use strlen for correct memory copy
+				}
+				// cout << "drift value in filter: " << eventAdwin.drift << endl;
+
+				totalSize++;
+				line_c++;
+				sede.YSBserializeAdwin(&eventAdwin, outMessage);
+
+				sede.YSBdeserializeAdwin(outMessage, &eventAdwin,
+										 outMessage->size - sizeof(EventAdwin));
+				// sede.YSBprintAdwin(&eventAdwin);
+
+				j++;
 
 				i++;
 			}
@@ -166,10 +287,10 @@ void EventFilterCD::streamProcess(int channel)
 			for (vector<Vertex *>::iterator v = next.begin(); v != next.end();
 				 ++v)
 			{
-				int wid = eventRG.event_time/AGG_WIND_SPAN;
-				int idx =  n *  worldSize + 0; // always keep workload on same rank
+				int wid = eventCD.event_time / AGG_WIND_SPAN;
+				int idx = n * worldSize + 0; // always keep workload on same rank
 				// int idx =  wid % worldSize + 0; // always keep workload on same rank
-				
+
 				if (PIPELINE)
 				{
 
@@ -190,7 +311,7 @@ void EventFilterCD::streamProcess(int channel)
 				{
 
 					// Normal mode: synchronize on outgoing message channel & send message
-					
+
 					// cout<<"Window id: "<<wid<<" Time stamp: "<<eventRG.event_time<<endl;
 					pthread_mutex_lock(&senderMutexes[idx]);
 					outMessages[idx].push_back(outMessage);

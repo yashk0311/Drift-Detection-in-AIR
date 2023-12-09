@@ -44,7 +44,6 @@ class EventCollectorCD: public Vertex {
 
 private:
 	ofstream lat;
-	ofstream tp;
 	
 public:
 
@@ -63,7 +62,6 @@ public:
 	void batchProcess();
 
 	void streamProcess(int channel);
-	long int getCurrentTimestampMillisec();
 private:
 	std::ofstream datafile;
 

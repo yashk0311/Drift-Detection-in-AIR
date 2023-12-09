@@ -47,11 +47,14 @@
 #include <bits/stdc++.h>
 #include "../communication/Window.hpp"
 #include "EventGenerator_cd.hpp"
+#include <fstream>
+#include <istream>
 
 using namespace std;
 
 EventGeneratorCD::EventGeneratorCD(int tag, int rank, int worldSize,
-								   unsigned long tp, unsigned long dr) : Vertex(tag, rank, worldSize)
+								   unsigned long tp, unsigned long dr) : Vertex(tag, rank, worldSize),
+								   gen("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/bags.csv")
 {
 	this->throughput = tp;
 	this->drift_rate = dr;
@@ -173,8 +176,6 @@ void EventGeneratorCD::streamProcess(int channel)
 					(*v)->inMessages[idx].push_back(
 						outMessagesPerSec[msg_count]);
 
-					
-
 					D(
 						cout << "EventGeneratorCD->PIPELINE MESSAGE [" << tag
 							 << "] #" << c << " @ " << rank
@@ -224,15 +225,21 @@ vector<string> random_sample(vector<string> &items, int num)
 	return result;
 }
 
-
 void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 									  Message *message, int events_per_msg, long int time_now)
 {
+	// Vector of items
 	vector<string> items = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+
+	// Start time for throughput calculation
 	int start = MPI_Wtime();
+
+	// Trending items and remaining items for drift
 	vector<string> trending_items = random_sample(items, 5);
 	vector<string> remaining_items;
 	vector<string> replaced_items;
+
+	// Populate remaining items
 	for (auto &item : items)
 	{
 		if (find(trending_items.begin(), trending_items.end(), item) == trending_items.end())
@@ -241,105 +248,80 @@ void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 		}
 	}
 
-    int bag_count = 0;
+	// Variables for bag count, change count, pause, and timing
+	int bag_count = 0;
 	int change_count = 0;
-	auto pause_start =chrono::system_clock::now();
-	string ans = "";
 	bool pause = false;
 	int change_rate = drift_rate / 2;
+	chrono::time_point<chrono::system_clock> pause_start;
 
+	// Serialization and time variables
 	Serialization sede;
 	long int max_time = 0;
 	int i = 0;
-
+	
+	// Loop through requested events
 	while (i < events_per_msg)
 	{
+		// Check if remaining items are empty
+		if (remaining_items.empty())
+		{
+			break;
+		}
+
+		// Check for throughput limit or time limit
 		if (MPI_Wtime() - start > 1 || bag_count > throughput)
 		{
 			total_bags += bag_count;
 			break;
 		}
 
+		// Generate a bag of 5 items from trending items and sort
 		vector<string> bag = random_sample(trending_items, 5);
 		sort(bag.begin(), bag.end());
-		// cout << "Bag " << bag_count + 1 << ": ";
-		for (auto &item : bag)
+
+		// Create and serialize event message
+		string ans = "";
+		for (const auto &item : bag)
 		{
 			ans += item;
 			ans += " ";
 		}
-
-		memcpy(event->bag, ans.c_str(), 10);
-		event->event_time = (time_now) + (999 - i % 1000);;
-		ans = ""; 
-
+		memcpy(event->bag, ans.c_str(), strlen(ans.c_str()) + 1); // Use strlen for correct memory copy
+		event->event_time = time_now + (999 - i % 1000);
+		gen<<event->event_time<<","<<event->bag<<endl;
 		sede.YSBserializeCD(event, message);
-		// cout << "event_time: " << event->event_time << "\tbag contents: " << event->bag << endl;
-		// cout << endl;
+
+		// Update max time for window
 		if (max_time < event->event_time)
+		{
 			max_time = event->event_time;
+		}
 
+		// Increment bag and sleep based on throughput
 		bag_count += 1;
-		this_thread::sleep_for(chrono::seconds(1) / throughput); // Wait for the next bag
-
-		if (pause && chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() <= 3)
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / throughput));
+		
+		// Implement pause and change logic
+		if (bag_count % change_rate == 0 && change_count >= drift_rate) // Change trending items every drift_rate bags
 		{
-			// cout << "Pause is " << pause << ", time difference is " << chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() << endl;
-			continue;
-		}
-		else if (pause && chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() > 3)
-		{
-			remaining_items.clear();
-			for (auto &item : items)
-			{
-				if (find(trending_items.begin(), trending_items.end(), item) == trending_items.end())
-				{
-					remaining_items.push_back(item);
-				}
-			}
-			pause = false;
-			// cout<<"pause is "<<pause<<", time difference is "<<chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count()<<endl;
-		}
-		else if (bag_count >= drift_rate)
-		{
-			// After drift_rate bags, gradually change the trending items
-			if (bag_count % change_rate == 0 && !remaining_items.empty())
-			{
-				vector<string> items_to_replace;
-				for (const auto &item : trending_items)
-				{
-					if (find(replaced_items.begin(), replaced_items.end(), item) == replaced_items.end())
-					{
-						items_to_replace.push_back(item);
-					}
-				}
+			// Choose a random item to replace from trending items
+			string item_to_replace = trending_items[rand() % trending_items.size()];
+			trending_items.erase(remove(trending_items.begin(), trending_items.end(), item_to_replace), trending_items.end());
 
-				if (!items_to_replace.empty())
-				{
-					string item_to_replace = items_to_replace[rand() % items_to_replace.size()];
-					trending_items.erase(remove(trending_items.begin(), trending_items.end(), item_to_replace), trending_items.end());
+			// Choose a random item from remaining items to add to trending items
+			string new_item = remaining_items[rand() % remaining_items.size()];
+			trending_items.push_back(new_item);
 
-					string new_item = remaining_items[rand() % remaining_items.size()];
-					trending_items.push_back(new_item);
-					replaced_items.push_back(new_item);
-					remaining_items.erase(remove(remaining_items.begin(), remaining_items.end(), new_item), remaining_items.end());
-
-					change_count += 1;
-				}
-			}
-			// cout << "Change count: " << change_count << endl;
-			if (change_count == 5)
-			{
-				// After all trending items have been changed, start the pause
-				pause_start = chrono::system_clock::now();
-				pause = true;
-				change_count = 0;
-			}
+			// Update remaining items and replaced items
+			remaining_items.erase(remove(remaining_items.begin(), remaining_items.end(), new_item), remaining_items.end());
+			replaced_items.push_back(item_to_replace);
 		}
+		change_count++;
 		i++;
 	}
+
 	wrapper_unit->window_start_time = max_time;
-	// cout<<message->size<<endl;
 }
 
 int EventGeneratorCD::myrandom(int min, int max)

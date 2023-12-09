@@ -1,0 +1,14 @@
+
+AIR:190242 terminated with signal 6 at PC=7f80dfbd59fc SP=7f80d1db5550.  Backtrace:
+/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x12c)[0x7f80dfbd59fc]
+/lib/x86_64-linux-gnu/libc.so.6(raise+0x16)[0x7f80dfb81476]
+/lib/x86_64-linux-gnu/libc.so.6(abort+0xd3)[0x7f80dfb677f3]
+/lib/x86_64-linux-gnu/libc.so.6(+0x89676)[0x7f80dfbc8676]
+/lib/x86_64-linux-gnu/libc.so.6(+0xa0cfc)[0x7f80dfbdfcfc]
+/lib/x86_64-linux-gnu/libc.so.6(+0xa2a44)[0x7f80dfbe1a44]
+/lib/x86_64-linux-gnu/libc.so.6(free+0x73)[0x7f80dfbe4453]
+./AIR(_ZN16EventGeneratorCD14getNextMessageEP7EventCDP11WrapperUnitP7Messageil+0x18ad)[0x55e454fab78d]
+./AIR(_ZN16EventGeneratorCD13streamProcessEi+0x176)[0x55e454fac2b6]
+./AIR(_ZN8Dataflow21startRootThreadStreamEPv+0x1c)[0x55e454f6e36c]
+/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3)[0x7f80dfbd3ac3]
+/lib/x86_64-linux-gnu/libc.so.6(+0x126660)[0x7f80dfc65660]

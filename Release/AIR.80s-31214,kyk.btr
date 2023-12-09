@@ -1,0 +1,14 @@
+
+AIR:31214 terminated with signal 6 at PC=7f70c10fd9fc SP=7f70b201a6e0.  Backtrace:
+/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x12c)[0x7f70c10fd9fc]
+/lib/x86_64-linux-gnu/libc.so.6(raise+0x16)[0x7f70c10a9476]
+/lib/x86_64-linux-gnu/libc.so.6(abort+0xd3)[0x7f70c108f7f3]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xa2b9e)[0x7f70c1351b9e]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xae20c)[0x7f70c135d20c]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xae277)[0x7f70c135d277]
+/lib/x86_64-linux-gnu/libstdc++.so.6(__cxa_rethrow+0x4b)[0x7f70c135d52b]
+./AIR(+0x1deda)[0x558d18d1beda]
+./AIR(_ZN16EventGeneratorCD13streamProcessEi+0x195)[0x558d18d5e055]
+./AIR(_ZN8Dataflow21startRootThreadStreamEPv+0x1c)[0x558d18d2033c]
+/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3)[0x7f70c10fbac3]
+/lib/x86_64-linux-gnu/libc.so.6(+0x126660)[0x7f70c118d660]

@@ -1,0 +1,14 @@
+
+AIR:183856 terminated with signal 6 at PC=7f45a7e2b9fc SP=7f44e1ffa940.  Backtrace:
+/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x12c)[0x7f45a7e2b9fc]
+/lib/x86_64-linux-gnu/libc.so.6(raise+0x16)[0x7f45a7dd7476]
+/lib/x86_64-linux-gnu/libc.so.6(abort+0xd3)[0x7f45a7dbd7f3]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xb042a)[0x7f45a808d42a]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xae20c)[0x7f45a808b20c]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xae277)[0x7f45a808b277]
+/lib/x86_64-linux-gnu/libstdc++.so.6(+0xae4d8)[0x7f45a808b4d8]
+/lib/x86_64-linux-gnu/libstdc++.so.6(_ZSt24__throw_invalid_argumentPKc+0x40)[0x7f45a80823f2]
+./AIR(_ZN17PartialAggregator13streamProcessEi+0xfc1)[0x5610877f51a1]
+./AIR(_ZN6Vertex26startProcessorThreadStreamEPv+0x1a)[0x5610877c2dda]
+/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3)[0x7f45a7e29ac3]
+/lib/x86_64-linux-gnu/libc.so.6(+0x126660)[0x7f45a7ebb660]

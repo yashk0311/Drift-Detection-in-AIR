@@ -39,80 +39,95 @@
 
 using namespace std;
 
-void Serialization::deserialize(Window* window, Partition<int>* partition) {
+void Serialization::deserialize(Window *window, Partition<int> *partition)
+{
 	int len = sizeof(int);
-	for (int i = 0; i < window->size; i += len) {
+	for (int i = 0; i < window->size; i += len)
+	{
 		partition->add(decodeInt(&window->buffer[i]));
-		//cout << "  DESERIALIZE VALUE: " << decodeInt(&window->buffer[i])
+		// cout << "  DESERIALIZE VALUE: " << decodeInt(&window->buffer[i])
 		//		<< endl;
 	}
 }
 
-void Serialization::serialize(Partition<int>* partition, Message* message) {
+void Serialization::serialize(Partition<int> *partition, Message *message)
+{
 	int k = 0, len = sizeof(int);
-	for (int i = 0; i < partition->size(); i++) {
-		if (k + len <= message->capacity) {
+	for (int i = 0; i < partition->size(); i++)
+	{
+		if (k + len <= message->capacity)
+		{
 			encodeInt(&message->buffer[k], partition->get(i));
 			k += len;
 		}
-		//cout << "  SERIALIZE VALUE: " << partition->get(i) << endl;
+		// cout << "  SERIALIZE VALUE: " << partition->get(i) << endl;
 	}
 	message->size = k;
 }
 
-void Serialization::serialize(Partition<int>* partitions, int numPartitions,
-		Message** messages, int numMessages) {
+void Serialization::serialize(Partition<int> *partitions, int numPartitions,
+							  Message **messages, int numMessages)
+{
 	int k = 0, len = sizeof(int);
-	for (int i = 0; i < numPartitions; i++) {
-		for (int j = 0; j < partitions[i].size(); j++) {
-			if (messages[k]->size + len <= messages[k]->capacity) {
+	for (int i = 0; i < numPartitions; i++)
+	{
+		for (int j = 0; j < partitions[i].size(); j++)
+		{
+			if (messages[k]->size + len <= messages[k]->capacity)
+			{
 				encodeInt(&messages[k]->buffer[messages[k]->size],
-						partitions[i].get(j));
+						  partitions[i].get(j));
 				messages[k]->size += len;
 			}
 			k++;
 			if (k == numMessages)
 				k = 0;
-			//cout << "  SERIALIZE VALUE: " << partitions[i].getValue(j) << endl;
+			// cout << "  SERIALIZE VALUE: " << partitions[i].getValue(j) << endl;
 		}
 	}
 }
 
-int Serialization::decodeInt(char* chars) {
+int Serialization::decodeInt(char *chars)
+{
 	int value;
 	memcpy(&value, chars, sizeof(int));
 	return value;
 }
 
-void Serialization::encodeInt(char* chars, int val) {
+void Serialization::encodeInt(char *chars, int val)
+{
 	memcpy(chars, &val, sizeof(int));
 }
 
-float Serialization::decodeFloat(char* chars) {
+float Serialization::decodeFloat(char *chars)
+{
 	float value;
 	memcpy(&value, chars, sizeof(float));
 	return value;
 }
 
-void Serialization::encodeFloat(char* chars, float val) {
+void Serialization::encodeFloat(char *chars, float val)
+{
 	memcpy(chars, &val, sizeof(float));
 }
 
-void Serialization::YSBserializeDG(EventDG* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializeDG(EventDG *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->event_time, 8);
 	b += 8;
 	memcpy(b, &event->event_type, 9);
-	b +=9;
+	b += 9;
 	memcpy(b, event->ad_id, 37);
 	b += 37;
 	memcpy(b, event->userid_pageid_ipaddress, 82);
 	message->size += sizeof(EventDG);
 }
 
-void Serialization::YSBdeserializeDG(Message* message, EventDG* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializeDG(Message *message, EventDG *event,
+									 int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
 	memcpy(&event->event_type, b, 9);
@@ -122,22 +137,24 @@ void Serialization::YSBdeserializeDG(Message* message, EventDG* event,
 	memcpy(event->userid_pageid_ipaddress, b, 82);
 }
 
-void Serialization::YSBserializeRG(EventRG* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializeRG(EventRG *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->event_time, 8);
 	b += 8;
 	memcpy(b, &event->ad_id, 51);
 	message->size += sizeof(EventRG);
 }
 
-void Serialization::YSBserializeCD(EventCD* event, Message* message) {
+void Serialization::YSBserializeCD(EventCD *event, Message *message)
+{
 	// cout<<"hi"<<endl;
-	char* b = message->buffer + message->size;
+	char *b = message->buffer + message->size;
 	// cout<<" Message size: "<<message->size<<endl;
 	memcpy(b, &event->event_time, 8);
 	// cout<<"intermediate b value: "<<b<<" "<<endl;
 	b += 8;
-	memcpy(b, &event->bag, 10);
+	memcpy(b, &event->bag, 15);
 	// cout<<"intermediate b value: "<<b<<" "<<endl;
 	message->size += sizeof(EventCD);
 	// cout<<event->event_time<<endl;
@@ -145,99 +162,140 @@ void Serialization::YSBserializeCD(EventCD* event, Message* message) {
 	// cout<<"insisde serailize bag contents: "<<event->bag<<" event time: "<< event->event_time<<" Message buffer: "<<b;
 }
 
-void Serialization::YSBdeserializeCD(Message* message, EventCD* event,
-		int offset) {
+void Serialization::YSBdeserializeCD(Message *message, EventCD *event,
+									 int offset)
+{
 	// cout<<"hi"<<endl;
-	
-	char* b = message->buffer + offset;
+
+	char *b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
-	memcpy(&event->bag, b, 10);
+	memcpy(&event->bag, b, 15);
 	// cout<<"insisde deserailize bag contents: "<<event->bag<<" event time: "<< event->event_time<<" Message buffer: "<<b<<endl;
 	// cout<<event->event_time<<endl;
 }
 
-void Serialization::YSBdeserializeRG(Message* message, EventRG* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBserializeAdwin(EventAdwin *event, Message *message)
+{
+	char *b = message->buffer + message->size;
+	memcpy(b, &event->event_time, 8);
+	b += 8;
+	memcpy(b, &event->drift, 2);
+	message->size += sizeof(EventCD);
+	// cout<<"intermediate b value: "<<b<<" "<<endl;
+	// cout << "drift value in filter: " << event->drift << endl;
+}
+
+void Serialization::YSBdeserializeAdwin(Message *message, EventAdwin *event,
+										int offset)
+{
+	char *b = message->buffer + offset;
+	memcpy(&event->event_time, b, 8);
+	b += 8;
+	memcpy(&event->drift, b, 2);
+	
+}
+
+void Serialization::YSBdeserializeRG(Message *message, EventRG *event,
+									 int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
 	memcpy(&event->ad_id, b, 51);
 }
 
-void Serialization::YSBprintCD(EventCD* event) {
+void Serialization::YSBprintCD(EventCD *event)
+{
 	cout << "event_time: " << event->event_time << "\tbag contents: "
-			<< event->bag << endl;
+		 << event->bag << endl;
 }
 
-void Serialization::YSBprintDG(EventDG* event) {
+void Serialization::YSBprintDG(EventDG *event)
+{
 	cout << "event_time: " << event->event_time << "\tevent_type: "
-			<< event->event_type << "\tad_id: " << event->ad_id
-			<< "\tuser_id, page_id, ip_address: "
-			<< event->userid_pageid_ipaddress << endl;
+		 << event->event_type << "\tad_id: " << event->ad_id
+		 << "\tuser_id, page_id, ip_address: "
+		 << event->userid_pageid_ipaddress << endl;
 }
 
-void Serialization::unwrapFirstWU(Message* message, WrapperUnit* wu) {
+void Serialization::unwrapFirstWU(Message *message, WrapperUnit *wu)
+{
 	memcpy(&wu->window_start_time, message->buffer + 4, 8);
 	memcpy(&wu->completeness_tag_numerator, message->buffer + 12, 4);
 	memcpy(&wu->completeness_tag_denominator, message->buffer + 16, 4);
 }
 
-void Serialization::unwrap(Message* message) {//re-pointing the message variables to their respective positions
+void Serialization::unwrap(Message *message)
+{ // re-pointing the message variables to their respective positions
 	memcpy(&message->wrapper_length, message->buffer, 4);
 }
 
-void Serialization::YSBserializeFT(EventFT* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializeFT(EventFT *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->event_time, 8);
 	b += 8;
 	memcpy(b, event->ad_id, 51);
 	message->size += sizeof(EventFT);
 }
 
-void Serialization::printWrapper(WrapperUnit* wc) {
+void Serialization::printWrapper(WrapperUnit *wc)
+{
 	cout << "window_start_time: " << wc->window_start_time
-			<< "\tcompletness_tag_numerator: " << wc->completeness_tag_numerator
-			<< "\tcompletness_tag_denominator: "
-			<< wc->completeness_tag_denominator << endl;
+		 << "\tcompletness_tag_numerator: " << wc->completeness_tag_numerator
+		 << "\tcompletness_tag_denominator: "
+		 << wc->completeness_tag_denominator << endl;
 }
 
-void Serialization::YSBdeserializeFT(Message* message, EventFT* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializeFT(Message *message, EventFT *event,
+									 int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
 	memcpy(event->ad_id, b, 51);
 }
 
-void Serialization::YSBprintFT(EventFT* event) {
+void Serialization::YSBprintFT(EventFT *event)
+{
 	cout << "event_time: " << event->event_time << "\tad_id: " << event->ad_id
-			<< endl;
+		 << endl;
 }
 
-void Serialization::YSBserializeJ(EventJ* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBprintAdwin(EventAdwin *event)
+{
+	cout << "event_time: " << event->event_time << "\tdrift: " << event->drift
+		 << endl;
+}
+
+void Serialization::YSBserializeJ(EventJ *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->event_time, 8);
 	b += 8;
 	memcpy(b, event->c_id, 37);
 	message->size += sizeof(EventJ);
 }
 
-void Serialization::YSBdeserializeJ(Message* message, EventJ* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializeJ(Message *message, EventJ *event,
+									int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
 	memcpy(event->c_id, b, 37);
 }
 
-void Serialization::YSBprintJ(EventJ* event) {
+void Serialization::YSBprintJ(EventJ *event)
+{
 	cout << "event_time: " << event->event_time << "\tc_id: " << event->c_id
-			<< endl;
+		 << endl;
 }
 
-void Serialization::YSBserializePA(EventPA* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializePA(EventPA *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->max_event_time, 8);
 	b += 8;
 	memcpy(b, &event->c_id, 8);
@@ -246,9 +304,10 @@ void Serialization::YSBserializePA(EventPA* event, Message* message) {
 	message->size += sizeof(EventPA);
 }
 
-void Serialization::YSBdeserializePA(Message* message, EventPA* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializePA(Message *message, EventPA *event,
+									 int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->max_event_time, b, 8);
 	b += 8;
 	memcpy(&event->c_id, b, 8);
@@ -256,22 +315,25 @@ void Serialization::YSBdeserializePA(Message* message, EventPA* event,
 	memcpy(&event->count, b, 4);
 }
 
-void Serialization::YSBprintPA(EventPA* event) {
+void Serialization::YSBprintPA(EventPA *event)
+{
 	cout << "__________________________________________" << endl;
 	cout << "max_event_time: " << event->max_event_time << endl;
 	cout << "c_id: " << event->c_id << endl;
 	cout << "count: " << event->count << endl;
 }
 
-void Serialization::YSBprintReg(EventReg* event) {
+void Serialization::YSBprintReg(EventReg *event)
+{
 	cout << "__________________________________________" << endl;
 	cout << "WID: " << event->WID << endl;
-	cout << "count: " << event->count <<endl;
-	cout <<"latency: "<<event->latency<<endl;
+	cout << "count: " << event->count << endl;
+	cout << "latency: " << event->latency << endl;
 }
 
-void Serialization::YSBserializePC(EventPC* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializePC(EventPC *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->WID, 8);
 	b += 8;
 	memcpy(b, &event->c_id, 8);
@@ -282,30 +344,32 @@ void Serialization::YSBserializePC(EventPC* event, Message* message) {
 	message->size += sizeof(EventPC);
 }
 
-void Serialization::YSBserializePCReg(EventReg* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializePCReg(EventReg *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->WID, 8);
 	b += 8;
 	memcpy(b, &event->count, 4);
-	b+=4;
+	b += 4;
 	memcpy(b, &event->latency, 8);
 	message->size += sizeof(EventReg);
 }
 
-
-void Serialization::YSBdeserializePCReg(Message* message, EventReg* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializePCReg(Message *message, EventReg *event,
+										int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->WID, b, 8);
 	b += 8;
 	memcpy(&event->count, b, 4);
-	b+=4;
+	b += 4;
 	memcpy(&event->latency, b, 8);
 }
 
-void Serialization::YSBdeserializePC(Message* message, EventPC* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializePC(Message *message, EventPC *event,
+									 int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->WID, b, 8);
 	b += 8;
 	memcpy(&event->c_id, b, 8);
@@ -315,7 +379,8 @@ void Serialization::YSBdeserializePC(Message* message, EventPC* event,
 	memcpy(&event->latency, b, 4);
 }
 
-void Serialization::YSBprintPC(EventPC* event) {
+void Serialization::YSBprintPC(EventPC *event)
+{
 	cout << "__________________________________________" << endl;
 	cout << "WID: " << event->WID << endl;
 	cout << "c_id: " << event->c_id << endl;
@@ -323,29 +388,33 @@ void Serialization::YSBprintPC(EventPC* event) {
 	cout << "latency: " << event->latency << endl;
 }
 
-void Serialization::YSBserializeIdCnt(IdCount* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializeIdCnt(IdCount *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->max_event_time, 8);
 	b += 8;
 	memcpy(b, &event->count, 8);
 	message->size += sizeof(IdCount);
 }
 
-void Serialization::YSBdeserializeIdCnt(Message* message, IdCount* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializeIdCnt(Message *message, IdCount *event,
+										int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->max_event_time, b, 8);
 	b += 8;
 	memcpy(&event->count, b, 8);
 }
 
-void Serialization::YSBprintIdCnt(IdCount* event) {
+void Serialization::YSBprintIdCnt(IdCount *event)
+{
 	cout << "Max event time: " << event->max_event_time << "\t count: " << event->count
-			<< endl;
+		 << endl;
 }
 
-void Serialization::YSBserializePC_m(EventPC_m* event, Message* message) {
-	char* b = message->buffer + message->size;
+void Serialization::YSBserializePC_m(EventPC_m *event, Message *message)
+{
+	char *b = message->buffer + message->size;
 	memcpy(b, &event->WID, 8);
 	b += 8;
 	memcpy(b, &event->c_id, 8);
@@ -358,9 +427,10 @@ void Serialization::YSBserializePC_m(EventPC_m* event, Message* message) {
 	message->size += sizeof(EventPC_m);
 }
 
-void Serialization::YSBdeserializePC_m(Message* message, EventPC_m* event,
-		int offset) {
-	char* b = message->buffer + offset;
+void Serialization::YSBdeserializePC_m(Message *message, EventPC_m *event,
+									   int offset)
+{
+	char *b = message->buffer + offset;
 	memcpy(&event->WID, b, 8);
 	b += 8;
 	memcpy(&event->c_id, b, 8);
@@ -372,7 +442,8 @@ void Serialization::YSBdeserializePC_m(Message* message, EventPC_m* event,
 	memcpy(&event->type, b, 4);
 }
 
-void Serialization::YSBprintPC_m(EventPC_m* event) {
+void Serialization::YSBprintPC_m(EventPC_m *event)
+{
 	cout << "__________________________________________" << endl;
 	cout << "WID: " << event->WID << endl;
 	cout << "c_id: " << event->c_id << endl;

@@ -41,8 +41,7 @@
 using namespace std;
 
 EventCollectorCD::EventCollectorCD(int tag, int rank, int worldSize) : Vertex(tag, rank, worldSize),
-																	   lat("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/lat.csv"),
-																	   tp("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/throughputs.csv")
+																	   lat("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/drifts.csv")
 {
 
 	// Global stats
@@ -68,15 +67,6 @@ void EventCollectorCD::batchProcess()
 	D(cout << "EventCollectorCD->BATCHPROCESS [" << tag << "] @ " << rank << endl;)
 }
 
-long int EventCollectorCD::getCurrentTimestampMillisec()
-{
-	using namespace std::chrono;
-
-	auto currentTimePoint = system_clock::now();
-	auto duration = duration_cast<milliseconds>(currentTimePoint.time_since_epoch());
-
-	return duration.count();
-}
 void EventCollectorCD::streamProcess(int channel)
 {
 	D(cout << "EventCollectorCD->STREAMPROCESS [" << tag << "] @ " << rank
@@ -88,7 +78,7 @@ void EventCollectorCD::streamProcess(int channel)
 		list<Message *> *tmpMessages = new list<Message *>();
 		Serialization sede;
 
-		EventCD eventPCReg;
+		EventAdwin eventAdwin;
 
 		int c = 0;
 		long int WID_no = 0;
@@ -122,21 +112,27 @@ void EventCollectorCD::streamProcess(int channel)
 
 				int offset = sizeof(int) + (inMessage->wrapper_length * sizeof(WrapperUnit));
 
-				int event_count = (inMessage->size - offset) / sizeof(EventCD);
+				int event_count = (inMessage->size - offset) / sizeof(EventAdwin);
 				// cout << event_count << endl;
 
 				int i = 0, j = 0;
 				while (i < event_count)
 				{
 					// cout<<i<<endl;
-					sede.YSBdeserializeCD(inMessage, &eventPCReg,
-										  offset + (i * sizeof(EventCD)));
+					sede.YSBdeserializeAdwin(inMessage, &eventAdwin,
+											 offset + (i * sizeof(EventAdwin)));
 					// sum_latency += eventPCReg.latency;
 					// cout<<eventPCReg.bag<<endl;
-					cout << "bag contents: " << eventPCReg.bag << endl;
-					lat << WID_no << ", " << eventPCReg.bag << endl;
+					// cout << "bag contents: " << eventPCReg.bag << endl;
+					// lat << WID_no << ", " << eventPCReg.bag << endl;
 					WID_no++;
-					test_bag += eventPCReg.bag;
+					if (strcmp(eventAdwin.drift, "1") == 0)
+					{
+						lat << "Drift detected at event-time: " << eventAdwin.event_time << endl;
+						cout << "Drift detected at event-time: " << eventAdwin.event_time << endl;
+						cout << "------------------------------------------------------" << endl;
+					}
+
 					// count += eventPCReg.count;
 					S_CHECK(
 						datafile
@@ -158,10 +154,9 @@ void EventCollectorCD::streamProcess(int channel)
 				// cout << "The number of events in that window id is: " << count << endl;
 				// cout << "Total latency uptil this window is: " << sum_latency << endl;
 				// cout<<"test bag contents: "<<test_bag<<endl;
-				cout << "------------------------------------------------------" << endl;
+
 				delete inMessage; // delete message from incoming queue
 				c++;
-				
 			}
 
 			tmpMessages->clear();
