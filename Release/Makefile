@@ -130,6 +130,36 @@ AIR/fast:
 .PHONY : AIR/fast
 
 # target to build an object file
+src/ConceptDrift/ADWIN_cd.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o
+.PHONY : src/ConceptDrift/ADWIN_cd.o
+
+# target to preprocess a source file
+src/ConceptDrift/ADWIN_cd.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.i
+.PHONY : src/ConceptDrift/ADWIN_cd.i
+
+# target to generate assembly for a file
+src/ConceptDrift/ADWIN_cd.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.s
+.PHONY : src/ConceptDrift/ADWIN_cd.s
+
+# target to build an object file
+src/ConceptDrift/CUSUM_cd.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o
+.PHONY : src/ConceptDrift/CUSUM_cd.o
+
+# target to preprocess a source file
+src/ConceptDrift/CUSUM_cd.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.i
+.PHONY : src/ConceptDrift/CUSUM_cd.i
+
+# target to generate assembly for a file
+src/ConceptDrift/CUSUM_cd.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.s
+.PHONY : src/ConceptDrift/CUSUM_cd.s
+
+# target to build an object file
 src/ConceptDrift/EventCollector_cd.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.o
 .PHONY : src/ConceptDrift/EventCollector_cd.o
@@ -145,21 +175,6 @@ src/ConceptDrift/EventCollector_cd.s:
 .PHONY : src/ConceptDrift/EventCollector_cd.s
 
 # target to build an object file
-src/ConceptDrift/EventFilter_cd.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o
-.PHONY : src/ConceptDrift/EventFilter_cd.o
-
-# target to preprocess a source file
-src/ConceptDrift/EventFilter_cd.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.i
-.PHONY : src/ConceptDrift/EventFilter_cd.i
-
-# target to generate assembly for a file
-src/ConceptDrift/EventFilter_cd.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.s
-.PHONY : src/ConceptDrift/EventFilter_cd.s
-
-# target to build an object file
 src/ConceptDrift/EventGenerator_cd.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.o
 .PHONY : src/ConceptDrift/EventGenerator_cd.o
@@ -173,21 +188,6 @@ src/ConceptDrift/EventGenerator_cd.i:
 src/ConceptDrift/EventGenerator_cd.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.s
 .PHONY : src/ConceptDrift/EventGenerator_cd.s
-
-# target to build an object file
-src/ConceptDrift/FullAggregator_cd.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o
-.PHONY : src/ConceptDrift/FullAggregator_cd.o
-
-# target to preprocess a source file
-src/ConceptDrift/FullAggregator_cd.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.i
-.PHONY : src/ConceptDrift/FullAggregator_cd.i
-
-# target to generate assembly for a file
-src/ConceptDrift/FullAggregator_cd.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/AIR.dir/build.make CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.s
-.PHONY : src/ConceptDrift/FullAggregator_cd.s
 
 # target to build an object file
 src/batching/Map.o:
@@ -888,18 +888,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... AIR"
+	@echo "... src/ConceptDrift/ADWIN_cd.o"
+	@echo "... src/ConceptDrift/ADWIN_cd.i"
+	@echo "... src/ConceptDrift/ADWIN_cd.s"
+	@echo "... src/ConceptDrift/CUSUM_cd.o"
+	@echo "... src/ConceptDrift/CUSUM_cd.i"
+	@echo "... src/ConceptDrift/CUSUM_cd.s"
 	@echo "... src/ConceptDrift/EventCollector_cd.o"
 	@echo "... src/ConceptDrift/EventCollector_cd.i"
 	@echo "... src/ConceptDrift/EventCollector_cd.s"
-	@echo "... src/ConceptDrift/EventFilter_cd.o"
-	@echo "... src/ConceptDrift/EventFilter_cd.i"
-	@echo "... src/ConceptDrift/EventFilter_cd.s"
 	@echo "... src/ConceptDrift/EventGenerator_cd.o"
 	@echo "... src/ConceptDrift/EventGenerator_cd.i"
 	@echo "... src/ConceptDrift/EventGenerator_cd.s"
-	@echo "... src/ConceptDrift/FullAggregator_cd.o"
-	@echo "... src/ConceptDrift/FullAggregator_cd.i"
-	@echo "... src/ConceptDrift/FullAggregator_cd.s"
 	@echo "... src/batching/Map.o"
 	@echo "... src/batching/Map.i"
 	@echo "... src/batching/Map.s"

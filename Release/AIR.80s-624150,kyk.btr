@@ -1,8 +1,0 @@
-
-AIR:624150 terminated with signal 11 at PC=7f66b795f3fe SP=7f66a9b30990.  Backtrace:
-/lib/x86_64-linux-gnu/libc.so.6(free+0x1e)[0x7f66b795f3fe]
-./AIR(_ZN16EventGeneratorCD14getNextMessageEP7EventCDP11WrapperUnitP7Messageil+0x167d)[0x557076cb178d]
-./AIR(_ZN16EventGeneratorCD13streamProcessEi+0x176)[0x557076cb21f6]
-./AIR(_ZN8Dataflow21startRootThreadStreamEPv+0x1c)[0x557076c7435c]
-/lib/x86_64-linux-gnu/libc.so.6(+0x94ac3)[0x7f66b794eac3]
-/lib/x86_64-linux-gnu/libc.so.6(+0x126a40)[0x7f66b79e0a40]

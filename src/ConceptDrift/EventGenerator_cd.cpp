@@ -92,7 +92,7 @@ void EventGeneratorCD::streamProcess(int channel)
 	WrapperUnit wrapper_unit;
 	EventCD eventCD;
 
-	int wrappers_per_msg = 1; // currently only one wrapper per message!
+	int wrappers_per_msg = 2; // currently only one wrapper per message!
 	int events_per_msg = this->throughput / PER_SEC_MSG_COUNT / worldSize;
 
 	cout << "Events per message: " << events_per_msg << endl;

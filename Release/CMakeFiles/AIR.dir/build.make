@@ -727,19 +727,19 @@ CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.s"
 	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventCollector_cd.cpp -o CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.s
 
-CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o: CMakeFiles/AIR.dir/flags.make
-CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o: ../src/ConceptDrift/EventFilter_cd.cpp
-CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o: CMakeFiles/AIR.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o"
-	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o -MF CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o.d -o CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o -c /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventFilter_cd.cpp
+CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o: CMakeFiles/AIR.dir/flags.make
+CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o: ../src/ConceptDrift/CUSUM_cd.cpp
+CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o: CMakeFiles/AIR.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o"
+	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o -MF CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o.d -o CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o -c /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/CUSUM_cd.cpp
 
-CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.i"
-	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventFilter_cd.cpp > CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.i
+CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.i"
+	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/CUSUM_cd.cpp > CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.i
 
-CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.s"
-	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventFilter_cd.cpp -o CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.s
+CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.s"
+	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/CUSUM_cd.cpp -o CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.s
 
 CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.o: CMakeFiles/AIR.dir/flags.make
 CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.o: ../src/ConceptDrift/EventGenerator_cd.cpp
@@ -755,19 +755,19 @@ CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.s"
 	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventGenerator_cd.cpp -o CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.s
 
-CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o: CMakeFiles/AIR.dir/flags.make
-CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o: ../src/ConceptDrift/FullAggregator_cd.cpp
-CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o: CMakeFiles/AIR.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o"
-	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o -MF CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o.d -o CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o -c /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/FullAggregator_cd.cpp
+CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o: CMakeFiles/AIR.dir/flags.make
+CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o: ../src/ConceptDrift/ADWIN_cd.cpp
+CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o: CMakeFiles/AIR.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o"
+	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o -MF CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o.d -o CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o -c /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/ADWIN_cd.cpp
 
-CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.i"
-	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/FullAggregator_cd.cpp > CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.i
+CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.i"
+	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/ADWIN_cd.cpp > CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.i
 
-CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.s"
-	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/FullAggregator_cd.cpp -o CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.s
+CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.s"
+	/usr/bin/mpic++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/ADWIN_cd.cpp -o CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.s
 
 # Object files for target AIR
 AIR_OBJECTS = \
@@ -818,9 +818,9 @@ AIR_OBJECTS = \
 "CMakeFiles/AIR.dir/src/yahoo_m/FullAggregator_m.o" \
 "CMakeFiles/AIR.dir/src/yahoo_m/WinJoinYSB_m.o" \
 "CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.o" \
-"CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o" \
+"CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o" \
 "CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.o" \
-"CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o"
+"CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o"
 
 # External object files for target AIR
 AIR_EXTERNAL_OBJECTS =
@@ -872,9 +872,9 @@ AIR: CMakeFiles/AIR.dir/src/yahoo_m/EventFilter_m.o
 AIR: CMakeFiles/AIR.dir/src/yahoo_m/FullAggregator_m.o
 AIR: CMakeFiles/AIR.dir/src/yahoo_m/WinJoinYSB_m.o
 AIR: CMakeFiles/AIR.dir/src/ConceptDrift/EventCollector_cd.o
-AIR: CMakeFiles/AIR.dir/src/ConceptDrift/EventFilter_cd.o
+AIR: CMakeFiles/AIR.dir/src/ConceptDrift/CUSUM_cd.o
 AIR: CMakeFiles/AIR.dir/src/ConceptDrift/EventGenerator_cd.o
-AIR: CMakeFiles/AIR.dir/src/ConceptDrift/FullAggregator_cd.o
+AIR: CMakeFiles/AIR.dir/src/ConceptDrift/ADWIN_cd.o
 AIR: CMakeFiles/AIR.dir/build.make
 AIR: CMakeFiles/AIR.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/yash/Desktop/Clg/7th_Sem/SDS/Project/Release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Linking CXX executable AIR"

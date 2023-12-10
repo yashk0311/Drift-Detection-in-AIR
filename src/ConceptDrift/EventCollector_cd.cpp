@@ -125,7 +125,6 @@ void EventCollectorCD::streamProcess(int channel)
 					// cout<<eventPCReg.bag<<endl;
 					// cout << "bag contents: " << eventPCReg.bag << endl;
 					// lat << WID_no << ", " << eventPCReg.bag << endl;
-					WID_no++;
 					if (strcmp(eventAdwin.drift, "1") == 0)
 					{
 						lat << "Drift detected at event-time: " << eventAdwin.event_time << endl;

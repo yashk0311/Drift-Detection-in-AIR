@@ -25,13 +25,13 @@
  **/
 
 /*
- * EventFilterCD.cpp
+ * ADWIN_cd.cpp
  *
  *  Created on:
  *      Author: vinu.venugopal
  */
 
-#include "EventFilter_cd.hpp"
+#include "ADWIN_cd.hpp"
 
 #include <mpi.h>
 // #include <__threading_support>
@@ -49,30 +49,22 @@
 
 using namespace std;
 
-EventFilterCD::EventFilterCD(int tag, int rank, int worldSize, string pattern) : Vertex(tag, rank, worldSize)
+ADWIN_cd::ADWIN_cd(int tag, int rank, int worldSize, string pattern) : Vertex(tag, rank, worldSize)
 {
 	this->pattern = pattern;
-	D(cout << "EventFilterCD [" << tag << "] CREATED @ " << rank << endl;)
+	D(cout << "ADWIN_cd [" << tag << "] CREATED @ " << rank << endl;)
 	THROUGHPUT_LOG(
 		datafile.open("Data/tp_log" + to_string(rank) + ".tsv");)
 }
 
-EventFilterCD::~EventFilterCD()
+ADWIN_cd::~ADWIN_cd()
 {
-	D(cout << "EventFilterCD [" << tag << "] DELETED @ " << rank << endl;)
+	D(cout << "ADWIN_cd [" << tag << "] DELETED @ " << rank << endl;)
 }
 
-void EventFilterCD::batchProcess()
+void ADWIN_cd::batchProcess()
 {
-	cout << "EventFilterCD->BATCHPROCESS [" << tag << "] @ " << rank << endl;
-}
-
-bool EventFilterCD::find_regex(string text, string pattern)
-{
-	regex regexPattern(pattern);
-	smatch match;
-
-	return regex_search(text, match, regexPattern);
+	cout << "ADWIN_cd->BATCHPROCESS [" << tag << "] @ " << rank << endl;
 }
 
 struct Bucket
@@ -146,10 +138,10 @@ pair<bool, vector<Bucket>> detectDrift(double variance, int totalSize, int bucke
 	return make_pair(false, vector<Bucket>());
 }
 
-void EventFilterCD::streamProcess(int channel)
+void ADWIN_cd::streamProcess(int channel)
 {
 
-	D(cout << "EventFilterCD->STREAMPROCESS [" << tag << "] @ " << rank
+	D(cout << "ADWIN_cd->STREAMPROCESS [" << tag << "] @ " << rank
 		   << " IN-CHANNEL " << channel << endl;)
 
 	Message *inMessage, *outMessage;
@@ -188,7 +180,7 @@ void EventFilterCD::streamProcess(int channel)
 			inMessage = tmpMessages->front();
 			tmpMessages->pop_front();
 
-			D(cout << "EventFilterCD->POP MESSAGE: TAG [" << tag << "] @ " << rank
+			D(cout << "ADWIN_cd->POP MESSAGE: TAG [" << tag << "] @ " << rank
 				   << " CHANNEL " << channel << " BUFFER " << inMessage->size
 				   << endl;)
 
@@ -298,7 +290,7 @@ void EventFilterCD::streamProcess(int channel)
 					pthread_mutex_lock(&(*v)->listenerMutexes[idx]);
 					(*v)->inMessages[idx].push_back(outMessage);
 
-					D(cout << "EventFilterCD->PIPELINE MESSAGE [" << tag << "] #"
+					D(cout << "ADWIN_cd->PIPELINE MESSAGE [" << tag << "] #"
 						   << c << " @ " << rank << " IN-CHANNEL " << channel
 						   << " OUT-CHANNEL " << idx << " SIZE "
 						   << outMessage->size << " CAP "
@@ -316,7 +308,7 @@ void EventFilterCD::streamProcess(int channel)
 					pthread_mutex_lock(&senderMutexes[idx]);
 					outMessages[idx].push_back(outMessage);
 
-					D(cout << "EventFilterCD->PUSHBACK MESSAGE [" << tag << "] #"
+					D(cout << "ADWIN_cd->PUSHBACK MESSAGE [" << tag << "] #"
 						   << c << " @ " << rank << " IN-CHANNEL " << channel
 						   << " OUT-CHANNEL " << idx << " SIZE "
 						   << outMessage->size << " CAP "

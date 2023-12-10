@@ -25,14 +25,14 @@
  **/
 
 /*
- * EventFilterCD.hpp
+ * CUSUM_cd.hpp
  *
  *  Created on:
  *      Author: vinu.venugopal
  */
 
-#ifndef OPERATOR_EventFilterCD_HPP_
-#define OPERATOR_EventFilterCD_HPP_
+#ifndef OPERATOR_CUSUM_cd_HPP_
+#define OPERATOR_CUSUM_cd_HPP_
 
 #include "../dataflow/Vertex.hpp"
 #include <string.h>
@@ -40,13 +40,13 @@
 
 using namespace std;
 
-class EventFilterCD: public Vertex {
+class CUSUM_cd: public Vertex {
 
 public:
 
-	EventFilterCD(int tag, int rank, int worldSize, string pattern);
+	CUSUM_cd(int tag, int rank, int worldSize, string pattern);
 
-	~EventFilterCD();
+	~CUSUM_cd();
 
 	void batchProcess();
 
@@ -61,4 +61,4 @@ private:
 
 };
 
-#endif /* OPERATOR_EventFilterCD_HPP_ */
+#endif /* OPERATOR_CUSUM_cd_HPP_ */

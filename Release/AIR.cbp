@@ -122,28 +122,28 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/ADWIN_cd.cpp">
+			<Option target="AIR"/>
+		</Unit>
+		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/ADWIN_cd.hpp">
+			<Option target="AIR"/>
+		</Unit>
+		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/CUSUM_cd.cpp">
+			<Option target="AIR"/>
+		</Unit>
+		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/CUSUM_cd.hpp">
+			<Option target="AIR"/>
+		</Unit>
 		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventCollector_cd.cpp">
 			<Option target="AIR"/>
 		</Unit>
 		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventCollector_cd.hpp">
 			<Option target="AIR"/>
 		</Unit>
-		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventFilter_cd.cpp">
-			<Option target="AIR"/>
-		</Unit>
-		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventFilter_cd.hpp">
-			<Option target="AIR"/>
-		</Unit>
 		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventGenerator_cd.cpp">
 			<Option target="AIR"/>
 		</Unit>
 		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/EventGenerator_cd.hpp">
-			<Option target="AIR"/>
-		</Unit>
-		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/FullAggregator_cd.cpp">
-			<Option target="AIR"/>
-		</Unit>
-		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/ConceptDrift/FullAggregator_cd.hpp">
 			<Option target="AIR"/>
 		</Unit>
 		<Unit filename="/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/batching/Map.cpp">

@@ -1,10 +1,9 @@
 #include "ConceptDrift.hpp"
 
 #include "../ConceptDrift/EventCollector_cd.hpp"
-#include "../ConceptDrift/EventFilter_cd.hpp"
+#include "../ConceptDrift/CUSUM_cd.hpp"
+#include "../ConceptDrift/ADWIN_cd.hpp"
 #include "../ConceptDrift/EventGenerator_cd.hpp"
-#include "../ConceptDrift/FullAggregator_cd.hpp"
-
 
 using namespace std;
 /**
@@ -16,17 +15,15 @@ ConceptDrift::ConceptDrift(unsigned long throughput, string drift_type, unsigned
 		Dataflow() {
 
 	generator = new EventGeneratorCD(1, rank, worldSize, throughput, drift_rate);
-	filter = new EventFilterCD(2, rank, worldSize, drift_type);  //concept drift detector
-	// aggregate = new FullAggregatorCD(3, rank, worldSize);
+	filter = new ADWIN_cd(2, rank, worldSize, drift_type);  //ADWIN concept drift detector
+	// filter = new CUSUM_cd(2, rank, worldSize, drift_type);  //CUSUM concept drift detector
 	collector = new EventCollectorCD(3, rank, worldSize);
 
 	addLink(generator, filter);
-	// addLink(filter, aggregate);
 	addLink(filter, collector);
 
 	generator->initialize();
 	filter->initialize();
-	// aggregate->initialize();
 	collector->initialize();
 }
 
@@ -34,6 +31,5 @@ ConceptDrift::~ConceptDrift() {
 
 	delete generator;
 	delete filter;
-	// delete aggregate;
 	delete collector;
 }

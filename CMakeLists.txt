@@ -126,10 +126,10 @@ add_executable(AIR
         src/yahoo_m/WinJoinYSB_m.hpp
         src/ConceptDrift/EventCollector_cd.cpp
         src/ConceptDrift/EventCollector_cd.hpp
-        src/ConceptDrift/EventFilter_cd.cpp
-        src/ConceptDrift/EventFilter_cd.hpp
+        src/ConceptDrift/CUSUM_cd.cpp
+        src/ConceptDrift/CUSUM_cd.hpp
         src/ConceptDrift/EventGenerator_cd.cpp
         src/ConceptDrift/EventGenerator_cd.hpp
-        src/ConceptDrift/FullAggregator_cd.cpp
-        src/ConceptDrift/FullAggregator_cd.hpp)
+        src/ConceptDrift/ADWIN_cd.cpp
+        src/ConceptDrift/ADWIN_cd.hpp)
         

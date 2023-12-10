@@ -1,6 +1,0 @@
-
-AIR:183557 terminated with signal 11 at PC=55abbbcd9757 SP=7ffe454ce0c0.  Backtrace:
-./AIR(main+0x2a7)[0x55abbbcd9757]
-/lib/x86_64-linux-gnu/libc.so.6(+0x29d90)[0x7f9fbb528d90]
-/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80)[0x7f9fbb528e40]
-./AIR(_start+0x25)[0x55abbbcda1b5]

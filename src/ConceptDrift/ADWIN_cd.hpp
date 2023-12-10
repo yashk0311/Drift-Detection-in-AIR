@@ -25,45 +25,40 @@
  **/
 
 /*
- * Aggregate.hpp
+ * ADWIN_cd.hpp
  *
- *  Created on: 18, Dec, 2018
+ *  Created on:
  *      Author: vinu.venugopal
  */
 
-#ifndef OPERATOR_FullAggregatorCD_HPP_
-#define OPERATOR_FullAggregatorCD_HPP_
-
-#include <unordered_map>
-#include <utility>
+#ifndef OPERATOR_ADWIN_cd_HPP_
+#define OPERATOR_ADWIN_cd_HPP_
 
 #include "../dataflow/Vertex.hpp"
+#include <string.h>
+#include <fstream>
 
 using namespace std;
 
-typedef std::pair<int, long int> count_maxeventtime;
-typedef unordered_map<long int, count_maxeventtime> InnerHMap;
-typedef unordered_map<long int, std::pair<long int, long int>> OuterHMapReg;
-typedef unordered_map<long int, std::pair<int, int>> WIDtoWrapperUnitHMap;
-
-class FullAggregatorCD: public Vertex {
+class ADWIN_cd: public Vertex {
 
 public:
 
-	OuterHMapReg WIDtoIHM;
-	pthread_mutex_t WIDtoIHM_mutex;
+	ADWIN_cd(int tag, int rank, int worldSize, string pattern);
 
-	WIDtoWrapperUnitHMap WIDtoWrapperUnit;
-	pthread_mutex_t WIDtoWrapperUnit_mutex;
-
-	FullAggregatorCD(int tag, int rank, int worldSize);
-
-	~FullAggregatorCD();
+	~ADWIN_cd();
 
 	void batchProcess();
 
 	void streamProcess(int channel);
 
+	bool find_regex(string text, string pattern);
+
+private:
+
+	std::ofstream datafile;
+	string pattern;
+
 };
 
-#endif /* OPERATOR_FullAggregatorCD_HPP_ */
+#endif /* OPERATOR_ADWIN_cd_HPP_ */
