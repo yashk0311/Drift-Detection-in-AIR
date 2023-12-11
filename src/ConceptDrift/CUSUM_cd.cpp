@@ -241,6 +241,7 @@ void CUSUM_cd::streamProcess(int channel)
                 {
                     // cout << "Concept drift detected at line number " << lineNumber << "! Upward CUSUM: " << sumUp << endl;
                     sumUp = 0;
+                    sumDown = 0;
                     string ans = "1";
                     memcpy(eventAdwin.drift, ans.c_str(), strlen(ans.c_str()) + 1);
                 }
@@ -248,6 +249,7 @@ void CUSUM_cd::streamProcess(int channel)
                 {
                     // cout << "Concept drift detected at line number " << lineNumber << "! Downward CUSUM: " << sumDown << endl;
                     sumDown = 0;
+                    sumUp = 0;
                     string ans = "1";
                     memcpy(eventAdwin.drift, ans.c_str(), strlen(ans.c_str()) + 1);
                 }

@@ -131,7 +131,6 @@ pair<bool, vector<Bucket>> detectDrift(double variance, int totalSize, int bucke
 		vector<Bucket> buckets;
 		buckets.push_back({0, 0.0});
 		totalSize = 0;
-		lastChange = 0.0;
 		return make_pair(true, buckets);
 	}
 
@@ -212,7 +211,7 @@ void ADWIN_cd::streamProcess(int channel)
 			buckets.push_back({0, 0.0});
 			int totalSize = 0;
 			double lastChange = 0.0;
-			int bucketSize = 10;
+			int bucketSize = 5;
 			double delta = 0.03;
 			//*/
 			while (i < event_count)
@@ -227,7 +226,6 @@ void ADWIN_cd::streamProcess(int channel)
 				istringstream iss(line);
 				string number;
 				vector<double> values;
-				iss >> number;
 				while (iss >> number)
 				{
 					values.push_back(stod(number));
