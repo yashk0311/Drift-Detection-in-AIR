@@ -15,8 +15,10 @@ ConceptDrift::ConceptDrift(unsigned long throughput, string drift_type, unsigned
 		Dataflow() {
 
 	generator = new EventGeneratorCD(1, rank, worldSize, throughput, drift_rate);
-	filter = new ADWIN_cd(2, rank, worldSize, drift_type);  //ADWIN concept drift detector
-	// filter = new CUSUM_cd(2, rank, worldSize, drift_type);  //CUSUM concept drift detector
+	if(drift_type == "ADWIN")
+		filter = new ADWIN_cd(2, rank, worldSize, drift_type);  //ADWIN concept drift detector
+	else if(drift_type == "CUSUM")
+		filter = new CUSUM_cd(2, rank, worldSize, drift_type);  //CUSUM concept drift detector
 	collector = new EventCollectorCD(3, rank, worldSize);
 
 	addLink(generator, filter);

@@ -54,7 +54,8 @@ using namespace std;
 
 EventGeneratorCD::EventGeneratorCD(int tag, int rank, int worldSize,
 								   unsigned long tp, unsigned long dr) : Vertex(tag, rank, worldSize),
-								   gen("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/bags.csv")
+																		 gen("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/bags.csv"),
+																		 tp("/home/yash/Desktop/Clg/7th_Sem/SDS/Project/src/gen_tp.csv")
 {
 	this->throughput = tp;
 	this->drift_rate = dr;
@@ -70,6 +71,8 @@ EventGeneratorCD::EventGeneratorCD(int tag, int rank, int worldSize,
 EventGeneratorCD::~EventGeneratorCD()
 {
 	D(cout << "EventGeneratorCD [" << tag << "] DELTETED @ " << rank << endl;)
+	gen.close();
+	tp.close();
 }
 
 void EventGeneratorCD::batchProcess()
@@ -92,10 +95,10 @@ void EventGeneratorCD::streamProcess(int channel)
 	WrapperUnit wrapper_unit;
 	EventCD eventCD;
 
-	int wrappers_per_msg = 2; // currently only one wrapper per message!
+	int wrappers_per_msg = 1; // currently only one wrapper per message!
 	int events_per_msg = this->throughput / PER_SEC_MSG_COUNT / worldSize;
 
-	cout << "Events per message: " << events_per_msg << endl;
+	// cout << "Events per message: " << events_per_msg << endl;
 
 	long int start_time = (long int)MPI_Wtime();
 	long int t1, t2;
@@ -124,7 +127,7 @@ void EventGeneratorCD::streamProcess(int channel)
 				   sizeof(int));
 			memcpy(outMessagesPerSec[msg_count]->buffer + sizeof(int),
 				   &wrapper_unit, sizeof(WrapperUnit));
-			// Declare the eventCD variable
+
 			EventCD eventCD;
 
 			outMessagesPerSec[msg_count]->size += sizeof(int) + outMessagesPerSec[msg_count]->wrapper_length * sizeof(WrapperUnit);
@@ -228,18 +231,13 @@ vector<string> random_sample(vector<string> &items, int num)
 void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 									  Message *message, int events_per_msg, long int time_now)
 {
-	// Vector of items
 	vector<string> items = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
 
-	// Start time for throughput calculation
-	int start = MPI_Wtime();
-
-	// Trending items and remaining items for drift
+	auto start = MPI_Wtime();
 	vector<string> trending_items = random_sample(items, 5);
 	vector<string> remaining_items;
 	vector<string> replaced_items;
 
-	// Populate remaining items
 	for (auto &item : items)
 	{
 		if (find(trending_items.begin(), trending_items.end(), item) == trending_items.end())
@@ -248,39 +246,33 @@ void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 		}
 	}
 
-	// Variables for bag count, change count, pause, and timing
 	int bag_count = 0;
 	int change_count = 0;
 	bool pause = false;
 	int change_rate = drift_rate / 2;
 	chrono::time_point<chrono::system_clock> pause_start;
 
-	// Serialization and time variables
 	Serialization sede;
 	long int max_time = 0;
 	int i = 0;
-	
-	// Loop through requested events
+
 	while (i < events_per_msg)
 	{
-		// Check if remaining items are empty
 		if (remaining_items.empty())
 		{
 			break;
 		}
 
-		// Check for throughput limit or time limit
 		if (MPI_Wtime() - start > 1 || bag_count > throughput)
 		{
+
 			total_bags += bag_count;
 			break;
 		}
 
-		// Generate a bag of 5 items from trending items and sort
 		vector<string> bag = random_sample(trending_items, 5);
 		sort(bag.begin(), bag.end());
 
-		// Create and serialize event message
 		string ans = "";
 		for (const auto &item : bag)
 		{
@@ -289,31 +281,25 @@ void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 		}
 		memcpy(event->bag, ans.c_str(), strlen(ans.c_str()) + 1); // Use strlen for correct memory copy
 		event->event_time = time_now + (999 - i % 1000);
-		gen<<event->event_time<<","<<event->bag<<endl;
+		gen << event->event_time << "," << event->bag << endl;
 		sede.YSBserializeCD(event, message);
 
-		// Update max time for window
 		if (max_time < event->event_time)
 		{
 			max_time = event->event_time;
 		}
 
-		// Increment bag and sleep based on throughput
 		bag_count += 1;
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / throughput));
-		
-		// Implement pause and change logic
+		// std::this_thread::sleep_for(std::chrono::milliseconds(1000 / throughput));
+
 		if (bag_count % change_rate == 0 && change_count >= drift_rate) // Change trending items every drift_rate bags
 		{
-			// Choose a random item to replace from trending items
 			string item_to_replace = trending_items[rand() % trending_items.size()];
 			trending_items.erase(remove(trending_items.begin(), trending_items.end(), item_to_replace), trending_items.end());
 
-			// Choose a random item from remaining items to add to trending items
 			string new_item = remaining_items[rand() % remaining_items.size()];
 			trending_items.push_back(new_item);
 
-			// Update remaining items and replaced items
 			remaining_items.erase(remove(remaining_items.begin(), remaining_items.end(), new_item), remaining_items.end());
 			replaced_items.push_back(item_to_replace);
 		}
@@ -321,6 +307,7 @@ void EventGeneratorCD::getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 		i++;
 	}
 
+	// total_bags = 0;
 	wrapper_unit->window_start_time = max_time;
 }
 

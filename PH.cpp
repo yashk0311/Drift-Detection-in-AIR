@@ -26,7 +26,7 @@ void processFile(const string &filePath) {
     while (getline(file, line)) {
         istringstream iss(line);
         string id;
-        iss >> id; // ignore id
+        iss >> id;
 
         vector<double> values;
         string number;

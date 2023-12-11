@@ -222,8 +222,7 @@ void ADWIN_cd::streamProcess(int channel)
 									  offset + (i * sizeof(EventCD)));
 
 				eventAdwin.event_time = eventCD.event_time;
-				// cout << "Generator event time: " << eventCD.event_time << endl;
-				// cout << "Filter event time: " << eventAdwin.event_time << endl;
+				
 				line = eventCD.bag;
 				istringstream iss(line);
 				string number;
@@ -233,12 +232,6 @@ void ADWIN_cd::streamProcess(int channel)
 				{
 					values.push_back(stod(number));
 				}
-
-				// if (values.size() != 5)
-				// {
-				// 	cout << "Invalid input: " << line << endl;
-				// 	continue;
-				// }
 
 				double mean = accumulate(values.begin(), values.end(), 0.0) / values.size();
 				buckets = updateBuckets(buckets, mean, bucketSize);

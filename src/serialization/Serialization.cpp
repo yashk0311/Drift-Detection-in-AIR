@@ -148,31 +148,21 @@ void Serialization::YSBserializeRG(EventRG *event, Message *message)
 
 void Serialization::YSBserializeCD(EventCD *event, Message *message)
 {
-	// cout<<"hi"<<endl;
 	char *b = message->buffer + message->size;
-	// cout<<" Message size: "<<message->size<<endl;
 	memcpy(b, &event->event_time, 8);
-	// cout<<"intermediate b value: "<<b<<" "<<endl;
 	b += 8;
 	memcpy(b, &event->bag, 15);
-	// cout<<"intermediate b value: "<<b<<" "<<endl;
 	message->size += sizeof(EventCD);
-	// cout<<event->event_time<<endl;
-	// cout<<event->bag<<endl;
-	// cout<<"insisde serailize bag contents: "<<event->bag<<" event time: "<< event->event_time<<" Message buffer: "<<b;
 }
+
 
 void Serialization::YSBdeserializeCD(Message *message, EventCD *event,
 									 int offset)
 {
-	// cout<<"hi"<<endl;
-
 	char *b = message->buffer + offset;
 	memcpy(&event->event_time, b, 8);
 	b += 8;
 	memcpy(&event->bag, b, 15);
-	// cout<<"insisde deserailize bag contents: "<<event->bag<<" event time: "<< event->event_time<<" Message buffer: "<<b<<endl;
-	// cout<<event->event_time<<endl;
 }
 
 void Serialization::YSBserializeAdwin(EventAdwin *event, Message *message)
@@ -182,8 +172,6 @@ void Serialization::YSBserializeAdwin(EventAdwin *event, Message *message)
 	b += 8;
 	memcpy(b, &event->drift, 2);
 	message->size += sizeof(EventCD);
-	// cout<<"intermediate b value: "<<b<<" "<<endl;
-	// cout << "drift value in filter: " << event->drift << endl;
 }
 
 void Serialization::YSBdeserializeAdwin(Message *message, EventAdwin *event,

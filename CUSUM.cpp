@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const double K = 1.5; // Parameter for adjusting CUSUM
-const int WINDOW_SIZE = 5; // Window size for moving average
+const double K = 1.5; 
+const int WINDOW_SIZE = 5;
 
 double calculateEuclideanDistance(const vector<int>& dataPoint1, const vector<double>& dataPoint2) {
   double distance = 0.0;
@@ -33,24 +33,22 @@ int main() {
     return 1;
   }
 
-  double sumUp = 0.0; // Cumulative sum for upward direction
-  double sumDown = 0.0; // Cumulative sum for downward direction
-  int lineNumber = 1; // Track line number
-  deque<double> window; // Window for moving average
+  double sumUp = 0.0; 
+  double sumDown = 0.0; 
+  int lineNumber = 1; 
+  deque<double> window;
 
   // Read data from file
   string line;
   while (getline(inputFile, line)) {
     vector<int> dataPoint;
 
-    // Parse data point from line
     stringstream ss(line);
     int item;
     while (ss >> item) {
       dataPoint.push_back(item);
     }
 
-    // Calculate the distance from the expected value
     double distance = calculateEuclideanDistance(dataPoint, {0.0});
     window.push_back(distance);
     if (window.size() > WINDOW_SIZE) {
@@ -58,21 +56,18 @@ int main() {
     }
     double expectedDistance = calculateMovingAverage(window);
 
-    // Calculate the residual
     double median = window[window.size() / 2];
     double residual = calculateMedianAbsoluteDeviation(window, median);
 
-    // Update cumulative sums
     sumUp = max(0.0, sumUp + residual - K);
     sumDown = min(0.0, sumDown + residual + K);
 
-    // Check for drift based on fixed thresholds
     if (sumUp > 0.0) {
       cout << "Concept drift detected at line number " << lineNumber << "! Upward CUSUM: " << sumUp << endl;
-      sumUp = 0; // Reset CUSUM value
+      sumUp = 0; 
     } else if (sumDown < 0.0) {
       cout << "Concept drift detected at line number " << lineNumber << "! Downward CUSUM: " << sumDown << endl;
-      sumDown = 0; // Reset CUSUM value
+      sumDown = 0; 
     }
 
     lineNumber++;

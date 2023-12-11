@@ -2,11 +2,11 @@
 using namespace std;
 
 // DDM parameters
-const double LAMBDA = 0.2; // Weight given to recent data points
-const double THRESHOLD = 0.5; // Threshold for detecting drift
-const int WINDOW_SIZE = 5; // Size of the reference window
+const double LAMBDA = 0.2;
+const double THRESHOLD = 0.5; 
+const int WINDOW_SIZE = 5; 
 
-// Function to calculate the distance between two data points
+
 double calculateDistance(const vector<string>& dataPoint1, const vector<string>& dataPoint2) {
     int differences = 0;
 
@@ -38,14 +38,13 @@ double calculateStandardDeviation(const vector<double>& distances) {
 int main() {
     ifstream inputFile("generator.txt");
     string line;
-    int lineNumber = 1; // Track line number
+    int lineNumber = 1;
     vector<string> currentLineItems;
-    vector<vector<string>> referenceWindow(WINDOW_SIZE); // Store data points in the reference window
-    vector<double> distances; // Stores distances from reference window
-    vector<double> meanDistances; // Stores average distances over window
-    vector<double> standardDeviations; // Stores standard deviations of distances
+    vector<vector<string>> referenceWindow(WINDOW_SIZE);
+    vector<double> distances; 
+    vector<double> meanDistances; 
+    vector<double> standardDeviations; 
 
-    // Initialize reference window with first WINDOW_SIZE data points
     int i = 0;
     while (i < WINDOW_SIZE && getline(inputFile, line)) {
         currentLineItems.clear();
@@ -64,7 +63,6 @@ int main() {
         return 1;
     }
 
-    // Calculate initial statistics
     for (int j = 0; j < WINDOW_SIZE; j++) {
         distances.push_back(calculateDistance(currentLineItems, referenceWindow[j]));
     }
@@ -72,9 +70,8 @@ int main() {
     standardDeviations.push_back(calculateStandardDeviation(distances));
     distances.clear();
 
-    // Process remaining data points
     while (getline(inputFile, line)) {
-        ++lineNumber; // Update line number
+        ++lineNumber;
         currentLineItems.clear();
         stringstream ss(line);
         string item;
@@ -82,7 +79,7 @@ int main() {
             currentLineItems.push_back(item);
         }
 
-        // Update reference window, calculate distances, and maintain statistics
+        
         referenceWindow.erase(referenceWindow.begin());
         referenceWindow.push_back(currentLineItems);
         distances.clear();

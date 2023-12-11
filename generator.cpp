@@ -54,8 +54,8 @@ int main()
         else if (pause && chrono::duration_cast<chrono::seconds>(chrono::system_clock::now() - pause_start).count() > 3)
         {
             pause = false;
-            replaced_items.clear();  // Clear replaced_items to allow previously replaced items to be replaced again
-            remaining_items = items; // Reset remaining_items to all items
+            replaced_items.clear();  
+            remaining_items = items;
             for (const auto &item : trending_items)
             {
                 remaining_items.erase(remove(remaining_items.begin(), remaining_items.end(), item), remaining_items.end());

@@ -212,8 +212,7 @@ void CUSUM_cd::streamProcess(int channel)
                                       offset + (i * sizeof(EventCD)));
 
                 eventAdwin.event_time = eventCD.event_time;
-                // cout << "Generator event time: " << eventCD.event_time << endl;
-                // cout << "Filter event time: " << eventAdwin.event_time << endl;
+
                 string line = eventCD.bag;
                 istringstream iss(line);
                 vector<int> dataPoint;
@@ -223,24 +222,21 @@ void CUSUM_cd::streamProcess(int channel)
                     dataPoint.push_back(item);
                 }
 
-                // Calculate the distance from the expected value
                 double distance = calculateEuclideanDistance(dataPoint, {0.0});
                 window.push_back(distance);
+
                 if (window.size() > WINDOW_SIZE)
                 {
                     window.pop_front();
                 }
                 double expectedDistance = calculateMovingAverage(window);
 
-                // Calculate the residual
                 double median = window[window.size() / 2];
                 double residual = calculateMedianAbsoluteDeviation(window, median);
 
-                // Update cumulative sums
                 sumUp = max(0.0, sumUp + residual - K);
                 sumDown = min(0.0, sumDown + residual + K);
 
-                // Check for drift based on fixed thresholds
                 if (sumUp > 0.0)
                 {
                     // cout << "Concept drift detected at line number " << lineNumber << "! Upward CUSUM: " << sumUp << endl;

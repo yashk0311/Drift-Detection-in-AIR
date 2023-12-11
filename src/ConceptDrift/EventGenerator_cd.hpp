@@ -60,6 +60,7 @@ private:
 	std::ofstream datafile;
 	vector<string> ad_ids;
 	ofstream gen;
+	ofstream tp;
 
 	void getNextMessage(EventCD *event, WrapperUnit *wrapper_unit,
 						Message *message, int events_per_msg, long int time_now);
